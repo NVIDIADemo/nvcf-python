@@ -51,9 +51,9 @@ class NVCF(SyncAPIClient):
     function_deployment: resources.FunctionDeploymentResource
     function_invocation: resources.FunctionInvocationResource
     envelope_function_invocation: resources.EnvelopeFunctionInvocationResource
-    nvcf: resources.NVCFResource
-    assets: resources.AssetsResource
+    functions: resources.FunctionsResource
     authorizations: resources.AuthorizationsResource
+    assets: resources.AssetsResource
     queues: resources.QueuesResource
     pexec: resources.PexecResource
     cluster_groups_and_gpus: resources.ClusterGroupsAndGPUsResource
@@ -121,9 +121,9 @@ class NVCF(SyncAPIClient):
         self.function_deployment = resources.FunctionDeploymentResource(self)
         self.function_invocation = resources.FunctionInvocationResource(self)
         self.envelope_function_invocation = resources.EnvelopeFunctionInvocationResource(self)
-        self.nvcf = resources.NVCFResource(self)
-        self.assets = resources.AssetsResource(self)
+        self.functions = resources.FunctionsResource(self)
         self.authorizations = resources.AuthorizationsResource(self)
+        self.assets = resources.AssetsResource(self)
         self.queues = resources.QueuesResource(self)
         self.pexec = resources.PexecResource(self)
         self.cluster_groups_and_gpus = resources.ClusterGroupsAndGPUsResource(self)
@@ -243,9 +243,9 @@ class AsyncNVCF(AsyncAPIClient):
     function_deployment: resources.AsyncFunctionDeploymentResource
     function_invocation: resources.AsyncFunctionInvocationResource
     envelope_function_invocation: resources.AsyncEnvelopeFunctionInvocationResource
-    nvcf: resources.AsyncNVCFResource
-    assets: resources.AsyncAssetsResource
+    functions: resources.AsyncFunctionsResource
     authorizations: resources.AsyncAuthorizationsResource
+    assets: resources.AsyncAssetsResource
     queues: resources.AsyncQueuesResource
     pexec: resources.AsyncPexecResource
     cluster_groups_and_gpus: resources.AsyncClusterGroupsAndGPUsResource
@@ -313,9 +313,9 @@ class AsyncNVCF(AsyncAPIClient):
         self.function_deployment = resources.AsyncFunctionDeploymentResource(self)
         self.function_invocation = resources.AsyncFunctionInvocationResource(self)
         self.envelope_function_invocation = resources.AsyncEnvelopeFunctionInvocationResource(self)
-        self.nvcf = resources.AsyncNVCFResource(self)
-        self.assets = resources.AsyncAssetsResource(self)
+        self.functions = resources.AsyncFunctionsResource(self)
         self.authorizations = resources.AsyncAuthorizationsResource(self)
+        self.assets = resources.AsyncAssetsResource(self)
         self.queues = resources.AsyncQueuesResource(self)
         self.pexec = resources.AsyncPexecResource(self)
         self.cluster_groups_and_gpus = resources.AsyncClusterGroupsAndGPUsResource(self)
@@ -442,9 +442,9 @@ class NVCFWithRawResponse:
         self.envelope_function_invocation = resources.EnvelopeFunctionInvocationResourceWithRawResponse(
             client.envelope_function_invocation
         )
-        self.nvcf = resources.NVCFResourceWithRawResponse(client.nvcf)
-        self.assets = resources.AssetsResourceWithRawResponse(client.assets)
+        self.functions = resources.FunctionsResourceWithRawResponse(client.functions)
         self.authorizations = resources.AuthorizationsResourceWithRawResponse(client.authorizations)
+        self.assets = resources.AssetsResourceWithRawResponse(client.assets)
         self.queues = resources.QueuesResourceWithRawResponse(client.queues)
         self.pexec = resources.PexecResourceWithRawResponse(client.pexec)
         self.cluster_groups_and_gpus = resources.ClusterGroupsAndGPUsResourceWithRawResponse(
@@ -469,9 +469,9 @@ class AsyncNVCFWithRawResponse:
         self.envelope_function_invocation = resources.AsyncEnvelopeFunctionInvocationResourceWithRawResponse(
             client.envelope_function_invocation
         )
-        self.nvcf = resources.AsyncNVCFResourceWithRawResponse(client.nvcf)
-        self.assets = resources.AsyncAssetsResourceWithRawResponse(client.assets)
+        self.functions = resources.AsyncFunctionsResourceWithRawResponse(client.functions)
         self.authorizations = resources.AsyncAuthorizationsResourceWithRawResponse(client.authorizations)
+        self.assets = resources.AsyncAssetsResourceWithRawResponse(client.assets)
         self.queues = resources.AsyncQueuesResourceWithRawResponse(client.queues)
         self.pexec = resources.AsyncPexecResourceWithRawResponse(client.pexec)
         self.cluster_groups_and_gpus = resources.AsyncClusterGroupsAndGPUsResourceWithRawResponse(
@@ -496,9 +496,9 @@ class NVCFWithStreamedResponse:
         self.envelope_function_invocation = resources.EnvelopeFunctionInvocationResourceWithStreamingResponse(
             client.envelope_function_invocation
         )
-        self.nvcf = resources.NVCFResourceWithStreamingResponse(client.nvcf)
-        self.assets = resources.AssetsResourceWithStreamingResponse(client.assets)
+        self.functions = resources.FunctionsResourceWithStreamingResponse(client.functions)
         self.authorizations = resources.AuthorizationsResourceWithStreamingResponse(client.authorizations)
+        self.assets = resources.AssetsResourceWithStreamingResponse(client.assets)
         self.queues = resources.QueuesResourceWithStreamingResponse(client.queues)
         self.pexec = resources.PexecResourceWithStreamingResponse(client.pexec)
         self.cluster_groups_and_gpus = resources.ClusterGroupsAndGPUsResourceWithStreamingResponse(
@@ -529,9 +529,9 @@ class AsyncNVCFWithStreamedResponse:
         self.envelope_function_invocation = resources.AsyncEnvelopeFunctionInvocationResourceWithStreamingResponse(
             client.envelope_function_invocation
         )
-        self.nvcf = resources.AsyncNVCFResourceWithStreamingResponse(client.nvcf)
-        self.assets = resources.AsyncAssetsResourceWithStreamingResponse(client.assets)
+        self.functions = resources.AsyncFunctionsResourceWithStreamingResponse(client.functions)
         self.authorizations = resources.AsyncAuthorizationsResourceWithStreamingResponse(client.authorizations)
+        self.assets = resources.AsyncAssetsResourceWithStreamingResponse(client.assets)
         self.queues = resources.AsyncQueuesResourceWithStreamingResponse(client.queues)
         self.pexec = resources.AsyncPexecResourceWithStreamingResponse(client.pexec)
         self.cluster_groups_and_gpus = resources.AsyncClusterGroupsAndGPUsResourceWithStreamingResponse(

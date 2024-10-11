@@ -16,3 +16,5 @@ from .shared import (
 from .asset_create_params import AssetCreateParams as AssetCreateParams
 from .list_assets_response import ListAssetsResponse as ListAssetsResponse
 from .create_asset_response import CreateAssetResponse as CreateAssetResponse
+from .function_create_params import FunctionCreateParams as FunctionCreateParams
+from .function_retrieve_all_params import FunctionRetrieveAllParams as FunctionRetrieveAllParams

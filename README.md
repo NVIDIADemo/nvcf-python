@@ -35,7 +35,7 @@ client = NVCF(
     auth_token=os.environ.get("NVCF_AUTH_TOKEN"),
 )
 
-create_function_response = client.nvcf.functions.create(
+create_function_response = client.functions.create(
     inference_url="https://example.com",
     name="x",
 )
@@ -63,7 +63,7 @@ client = AsyncNVCF(
 
 
 async def main() -> None:
-    create_function_response = await client.nvcf.functions.create(
+    create_function_response = await client.functions.create(
         inference_url="https://example.com",
         name="x",
     )
@@ -100,7 +100,7 @@ from nvcf import NVCF
 client = NVCF()
 
 try:
-    client.nvcf.functions.create(
+    client.functions.create(
         inference_url="https://example.com",
         name="x",
     )
@@ -146,7 +146,7 @@ client = NVCF(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).nvcf.functions.create(
+client.with_options(max_retries=5).functions.create(
     inference_url="https://example.com",
     name="x",
 )
@@ -172,7 +172,7 @@ client = NVCF(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).nvcf.functions.create(
+client.with_options(timeout=5.0).functions.create(
     inference_url="https://example.com",
     name="x",
 )
@@ -214,13 +214,13 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from nvcf import NVCF
 
 client = NVCF()
-response = client.nvcf.functions.with_raw_response.create(
+response = client.functions.with_raw_response.create(
     inference_url="https://example.com",
     name="x",
 )
 print(response.headers.get('X-My-Header'))
 
-function = response.parse()  # get the object that `nvcf.functions.create()` would have returned
+function = response.parse()  # get the object that `functions.create()` would have returned
 print(function.function)
 ```
 
@@ -235,7 +235,7 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.nvcf.functions.with_streaming_response.create(
+with client.functions.with_streaming_response.create(
     inference_url="https://example.com",
     name="x",
 ) as response:

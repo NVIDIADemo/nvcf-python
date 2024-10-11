@@ -757,7 +757,7 @@ class TestNVCF:
 
         respx_mock.post("/v2/nvcf/functions").mock(side_effect=retry_handler)
 
-        response = client.nvcf.functions.with_raw_response.create(inference_url="https://example.com", name="x")
+        response = client.functions.with_raw_response.create(inference_url="https://example.com", name="x")
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -779,7 +779,7 @@ class TestNVCF:
 
         respx_mock.post("/v2/nvcf/functions").mock(side_effect=retry_handler)
 
-        response = client.nvcf.functions.with_raw_response.create(
+        response = client.functions.with_raw_response.create(
             inference_url="https://example.com", name="x", extra_headers={"x-stainless-retry-count": Omit()}
         )
 
@@ -804,7 +804,7 @@ class TestNVCF:
 
         respx_mock.post("/v2/nvcf/functions").mock(side_effect=retry_handler)
 
-        response = client.nvcf.functions.with_raw_response.create(
+        response = client.functions.with_raw_response.create(
             inference_url="https://example.com", name="x", extra_headers={"x-stainless-retry-count": "42"}
         )
 
@@ -1532,7 +1532,7 @@ class TestAsyncNVCF:
 
         respx_mock.post("/v2/nvcf/functions").mock(side_effect=retry_handler)
 
-        response = await client.nvcf.functions.with_raw_response.create(inference_url="https://example.com", name="x")
+        response = await client.functions.with_raw_response.create(inference_url="https://example.com", name="x")
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1557,7 +1557,7 @@ class TestAsyncNVCF:
 
         respx_mock.post("/v2/nvcf/functions").mock(side_effect=retry_handler)
 
-        response = await client.nvcf.functions.with_raw_response.create(
+        response = await client.functions.with_raw_response.create(
             inference_url="https://example.com", name="x", extra_headers={"x-stainless-retry-count": Omit()}
         )
 
@@ -1583,7 +1583,7 @@ class TestAsyncNVCF:
 
         respx_mock.post("/v2/nvcf/functions").mock(side_effect=retry_handler)
 
-        response = await client.nvcf.functions.with_raw_response.create(
+        response = await client.functions.with_raw_response.create(
             inference_url="https://example.com", name="x", extra_headers={"x-stainless-retry-count": "42"}
         )
 
