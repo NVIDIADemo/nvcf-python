@@ -2,12 +2,15 @@
 
 ```python
 from nvcf.types import (
-    AuthorizedPartiesResponse,
+    AuthorizedParties,
+    AuthorizedPartyDTO,
     CreateFunctionResponse,
-    FunctionResponse,
-    GetQueuesResponse,
+    Function,
+    FunctionDTO,
+    FunctionsResponse,
+    HealthDTO,
     InvokeFunctionResponse,
-    ListFunctionsResponse,
+    Queues,
 )
 ```
 
@@ -29,8 +32,8 @@ Methods:
 
 Methods:
 
-- <code title="get /v2/nvcf/functions/{functionId}/versions/{functionVersionId}">client.function_management.functions.versions.<a href="./src/nvcf/resources/function_management/functions/versions.py">retrieve</a>(function_version_id, \*, function_id) -> <a href="./src/nvcf/types/shared/function_response.py">FunctionResponse</a></code>
-- <code title="put /v2/nvcf/metadata/functions/{functionId}/versions/{functionVersionId}">client.function_management.functions.versions.<a href="./src/nvcf/resources/function_management/functions/versions.py">update</a>(function_version_id, \*, function_id, \*\*<a href="src/nvcf/types/function_management/functions/version_update_params.py">params</a>) -> <a href="./src/nvcf/types/shared/function_response.py">FunctionResponse</a></code>
+- <code title="get /v2/nvcf/functions/{functionId}/versions/{functionVersionId}">client.function_management.functions.versions.<a href="./src/nvcf/resources/function_management/functions/versions.py">retrieve</a>(function_version_id, \*, function_id) -> <a href="./src/nvcf/types/shared/function.py">Function</a></code>
+- <code title="put /v2/nvcf/metadata/functions/{functionId}/versions/{functionVersionId}">client.function_management.functions.versions.<a href="./src/nvcf/resources/function_management/functions/versions.py">update</a>(function_version_id, \*, function_id, \*\*<a href="src/nvcf/types/function_management/functions/version_update_params.py">params</a>) -> <a href="./src/nvcf/types/shared/function.py">Function</a></code>
 - <code title="delete /v2/nvcf/functions/{functionId}/versions/{functionVersionId}">client.function_management.functions.versions.<a href="./src/nvcf/resources/function_management/functions/versions.py">delete</a>(function_version_id, \*, function_id) -> None</code>
 
 ### IDs
@@ -38,12 +41,12 @@ Methods:
 Types:
 
 ```python
-from nvcf.types.function_management.functions import ListFunctionIDsResponse
+from nvcf.types.function_management.functions import IDRetrieveAllResponse
 ```
 
 Methods:
 
-- <code title="get /v2/nvcf/functions/ids">client.function_management.functions.ids.<a href="./src/nvcf/resources/function_management/functions/ids.py">list</a>(\*\*<a href="src/nvcf/types/function_management/functions/id_list_params.py">params</a>) -> <a href="./src/nvcf/types/function_management/functions/list_function_ids_response.py">ListFunctionIDsResponse</a></code>
+- <code title="get /v2/nvcf/functions/ids">client.function_management.functions.ids.<a href="./src/nvcf/resources/function_management/functions/ids.py">retrieve_all</a>(\*\*<a href="src/nvcf/types/function_management/functions/id_retrieve_all_params.py">params</a>) -> <a href="./src/nvcf/types/function_management/functions/id_retrieve_all_response.py">IDRetrieveAllResponse</a></code>
 
 # FunctionDeployment
 
@@ -62,7 +65,7 @@ Methods:
 - <code title="post /v2/nvcf/deployments/functions/{functionId}/versions/{functionVersionId}">client.function_deployment.functions.versions.<a href="./src/nvcf/resources/function_deployment/functions/versions.py">create</a>(function_version_id, \*, function_id, \*\*<a href="src/nvcf/types/function_deployment/functions/version_create_params.py">params</a>) -> <a href="./src/nvcf/types/function_deployment/functions/deployment_response.py">DeploymentResponse</a></code>
 - <code title="get /v2/nvcf/deployments/functions/{functionId}/versions/{functionVersionId}">client.function_deployment.functions.versions.<a href="./src/nvcf/resources/function_deployment/functions/versions.py">retrieve</a>(function_version_id, \*, function_id) -> <a href="./src/nvcf/types/function_deployment/functions/deployment_response.py">DeploymentResponse</a></code>
 - <code title="put /v2/nvcf/deployments/functions/{functionId}/versions/{functionVersionId}">client.function_deployment.functions.versions.<a href="./src/nvcf/resources/function_deployment/functions/versions.py">update</a>(function_version_id, \*, function_id, \*\*<a href="src/nvcf/types/function_deployment/functions/version_update_params.py">params</a>) -> <a href="./src/nvcf/types/function_deployment/functions/deployment_response.py">DeploymentResponse</a></code>
-- <code title="delete /v2/nvcf/deployments/functions/{functionId}/versions/{functionVersionId}">client.function_deployment.functions.versions.<a href="./src/nvcf/resources/function_deployment/functions/versions.py">delete</a>(function_version_id, \*, function_id, \*\*<a href="src/nvcf/types/function_deployment/functions/version_delete_params.py">params</a>) -> <a href="./src/nvcf/types/shared/function_response.py">FunctionResponse</a></code>
+- <code title="delete /v2/nvcf/deployments/functions/{functionId}/versions/{functionVersionId}">client.function_deployment.functions.versions.<a href="./src/nvcf/resources/function_deployment/functions/versions.py">delete</a>(function_version_id, \*, function_id, \*\*<a href="src/nvcf/types/function_deployment/functions/version_delete_params.py">params</a>) -> <a href="./src/nvcf/types/shared/function.py">Function</a></code>
 
 # FunctionInvocation
 
@@ -119,14 +122,14 @@ Methods:
 Methods:
 
 - <code title="post /v2/nvcf/functions">client.nvcf.functions.<a href="./src/nvcf/resources/nvcf/functions/functions.py">create</a>(\*\*<a href="src/nvcf/types/nvcf/function_create_params.py">params</a>) -> <a href="./src/nvcf/types/shared/create_function_response.py">CreateFunctionResponse</a></code>
-- <code title="get /v2/nvcf/functions">client.nvcf.functions.<a href="./src/nvcf/resources/nvcf/functions/functions.py">list</a>(\*\*<a href="src/nvcf/types/nvcf/function_list_params.py">params</a>) -> <a href="./src/nvcf/types/shared/list_functions_response.py">ListFunctionsResponse</a></code>
+- <code title="get /v2/nvcf/functions">client.nvcf.functions.<a href="./src/nvcf/resources/nvcf/functions/functions.py">retrieve_all</a>(\*\*<a href="src/nvcf/types/nvcf/function_retrieve_all_params.py">params</a>) -> <a href="./src/nvcf/types/shared/functions_response.py">FunctionsResponse</a></code>
 
 ### Versions
 
 Methods:
 
 - <code title="post /v2/nvcf/functions/{functionId}/versions">client.nvcf.functions.versions.<a href="./src/nvcf/resources/nvcf/functions/versions.py">create</a>(function_id, \*\*<a href="src/nvcf/types/nvcf/functions/version_create_params.py">params</a>) -> <a href="./src/nvcf/types/shared/create_function_response.py">CreateFunctionResponse</a></code>
-- <code title="get /v2/nvcf/functions/{functionId}/versions">client.nvcf.functions.versions.<a href="./src/nvcf/resources/nvcf/functions/versions.py">list</a>(function_id) -> <a href="./src/nvcf/types/shared/list_functions_response.py">ListFunctionsResponse</a></code>
+- <code title="get /v2/nvcf/functions/{functionId}/versions">client.nvcf.functions.versions.<a href="./src/nvcf/resources/nvcf/functions/versions.py">retrieve_all</a>(function_id) -> <a href="./src/nvcf/types/shared/functions_response.py">FunctionsResponse</a></code>
 
 ## Authorizations
 
@@ -140,17 +143,17 @@ from nvcf.types.nvcf.authorizations import ListAuthorizedPartiesResponse
 
 Methods:
 
-- <code title="get /v2/nvcf/authorizations/functions/{functionId}">client.nvcf.authorizations.functions.<a href="./src/nvcf/resources/nvcf/authorizations/functions/functions.py">list</a>(function_id) -> <a href="./src/nvcf/types/nvcf/authorizations/list_authorized_parties_response.py">ListAuthorizedPartiesResponse</a></code>
-- <code title="delete /v2/nvcf/authorizations/functions/{functionId}">client.nvcf.authorizations.functions.<a href="./src/nvcf/resources/nvcf/authorizations/functions/functions.py">delete</a>(function_id) -> <a href="./src/nvcf/types/shared/authorized_parties_response.py">AuthorizedPartiesResponse</a></code>
-- <code title="post /v2/nvcf/authorizations/functions/{functionId}">client.nvcf.authorizations.functions.<a href="./src/nvcf/resources/nvcf/authorizations/functions/functions.py">authorize</a>(function_id, \*\*<a href="src/nvcf/types/nvcf/authorizations/function_authorize_params.py">params</a>) -> <a href="./src/nvcf/types/shared/authorized_parties_response.py">AuthorizedPartiesResponse</a></code>
+- <code title="delete /v2/nvcf/authorizations/functions/{functionId}">client.nvcf.authorizations.functions.<a href="./src/nvcf/resources/nvcf/authorizations/functions/functions.py">delete</a>(function_id) -> <a href="./src/nvcf/types/shared/authorized_parties.py">AuthorizedParties</a></code>
+- <code title="post /v2/nvcf/authorizations/functions/{functionId}">client.nvcf.authorizations.functions.<a href="./src/nvcf/resources/nvcf/authorizations/functions/functions.py">authorize</a>(function_id, \*\*<a href="src/nvcf/types/nvcf/authorizations/function_authorize_params.py">params</a>) -> <a href="./src/nvcf/types/shared/authorized_parties.py">AuthorizedParties</a></code>
+- <code title="get /v2/nvcf/authorizations/functions/{functionId}">client.nvcf.authorizations.functions.<a href="./src/nvcf/resources/nvcf/authorizations/functions/functions.py">retrieve_all</a>(function_id) -> <a href="./src/nvcf/types/nvcf/authorizations/list_authorized_parties_response.py">ListAuthorizedPartiesResponse</a></code>
 
 #### Versions
 
 Methods:
 
-- <code title="get /v2/nvcf/authorizations/functions/{functionId}/versions/{functionVersionId}">client.nvcf.authorizations.functions.versions.<a href="./src/nvcf/resources/nvcf/authorizations/functions/versions.py">retrieve</a>(function_version_id, \*, function_id) -> <a href="./src/nvcf/types/shared/authorized_parties_response.py">AuthorizedPartiesResponse</a></code>
-- <code title="delete /v2/nvcf/authorizations/functions/{functionId}/versions/{functionVersionId}">client.nvcf.authorizations.functions.versions.<a href="./src/nvcf/resources/nvcf/authorizations/functions/versions.py">delete</a>(function_version_id, \*, function_id) -> <a href="./src/nvcf/types/shared/authorized_parties_response.py">AuthorizedPartiesResponse</a></code>
-- <code title="post /v2/nvcf/authorizations/functions/{functionId}/versions/{functionVersionId}">client.nvcf.authorizations.functions.versions.<a href="./src/nvcf/resources/nvcf/authorizations/functions/versions.py">authorize</a>(function_version_id, \*, function_id, \*\*<a href="src/nvcf/types/nvcf/authorizations/functions/version_authorize_params.py">params</a>) -> <a href="./src/nvcf/types/shared/authorized_parties_response.py">AuthorizedPartiesResponse</a></code>
+- <code title="get /v2/nvcf/authorizations/functions/{functionId}/versions/{functionVersionId}">client.nvcf.authorizations.functions.versions.<a href="./src/nvcf/resources/nvcf/authorizations/functions/versions.py">retrieve</a>(function_version_id, \*, function_id) -> <a href="./src/nvcf/types/shared/authorized_parties.py">AuthorizedParties</a></code>
+- <code title="delete /v2/nvcf/authorizations/functions/{functionId}/versions/{functionVersionId}">client.nvcf.authorizations.functions.versions.<a href="./src/nvcf/resources/nvcf/authorizations/functions/versions.py">delete</a>(function_version_id, \*, function_id) -> <a href="./src/nvcf/types/shared/authorized_parties.py">AuthorizedParties</a></code>
+- <code title="post /v2/nvcf/authorizations/functions/{functionId}/versions/{functionVersionId}">client.nvcf.authorizations.functions.versions.<a href="./src/nvcf/resources/nvcf/authorizations/functions/versions.py">authorize</a>(function_version_id, \*, function_id, \*\*<a href="src/nvcf/types/nvcf/authorizations/functions/version_authorize_params.py">params</a>) -> <a href="./src/nvcf/types/shared/authorized_parties.py">AuthorizedParties</a></code>
 
 # Assets
 
@@ -163,7 +166,7 @@ from nvcf.types import CreateAssetResponse, ListAssetsResponse
 Methods:
 
 - <code title="post /v2/nvcf/assets">client.assets.<a href="./src/nvcf/resources/assets.py">create</a>(\*\*<a href="src/nvcf/types/asset_create_params.py">params</a>) -> <a href="./src/nvcf/types/create_asset_response.py">CreateAssetResponse</a></code>
-- <code title="get /v2/nvcf/assets">client.assets.<a href="./src/nvcf/resources/assets.py">list</a>() -> <a href="./src/nvcf/types/list_assets_response.py">ListAssetsResponse</a></code>
+- <code title="get /v2/nvcf/assets">client.assets.<a href="./src/nvcf/resources/assets.py">retrieve_all</a>() -> <a href="./src/nvcf/types/list_assets_response.py">ListAssetsResponse</a></code>
 
 # Authorizations
 
@@ -171,15 +174,15 @@ Methods:
 
 Methods:
 
-- <code title="patch /v2/nvcf/authorizations/functions/{functionId}/add">client.authorizations.functions.<a href="./src/nvcf/resources/authorizations/functions/functions.py">add</a>(function_id, \*\*<a href="src/nvcf/types/authorizations/function_add_params.py">params</a>) -> <a href="./src/nvcf/types/shared/authorized_parties_response.py">AuthorizedPartiesResponse</a></code>
-- <code title="patch /v2/nvcf/authorizations/functions/{functionId}/remove">client.authorizations.functions.<a href="./src/nvcf/resources/authorizations/functions/functions.py">remove</a>(function_id, \*\*<a href="src/nvcf/types/authorizations/function_remove_params.py">params</a>) -> <a href="./src/nvcf/types/shared/authorized_parties_response.py">AuthorizedPartiesResponse</a></code>
+- <code title="patch /v2/nvcf/authorizations/functions/{functionId}/add">client.authorizations.functions.<a href="./src/nvcf/resources/authorizations/functions/functions.py">add</a>(function_id, \*\*<a href="src/nvcf/types/authorizations/function_add_params.py">params</a>) -> <a href="./src/nvcf/types/shared/authorized_parties.py">AuthorizedParties</a></code>
+- <code title="patch /v2/nvcf/authorizations/functions/{functionId}/remove">client.authorizations.functions.<a href="./src/nvcf/resources/authorizations/functions/functions.py">remove</a>(function_id, \*\*<a href="src/nvcf/types/authorizations/function_remove_params.py">params</a>) -> <a href="./src/nvcf/types/shared/authorized_parties.py">AuthorizedParties</a></code>
 
 ### Versions
 
 Methods:
 
-- <code title="patch /v2/nvcf/authorizations/functions/{functionId}/versions/{functionVersionId}/add">client.authorizations.functions.versions.<a href="./src/nvcf/resources/authorizations/functions/versions.py">add</a>(function_version_id, \*, function_id, \*\*<a href="src/nvcf/types/authorizations/functions/version_add_params.py">params</a>) -> <a href="./src/nvcf/types/shared/authorized_parties_response.py">AuthorizedPartiesResponse</a></code>
-- <code title="patch /v2/nvcf/authorizations/functions/{functionId}/versions/{functionVersionId}/remove">client.authorizations.functions.versions.<a href="./src/nvcf/resources/authorizations/functions/versions.py">remove</a>(function_version_id, \*, function_id, \*\*<a href="src/nvcf/types/authorizations/functions/version_remove_params.py">params</a>) -> <a href="./src/nvcf/types/shared/authorized_parties_response.py">AuthorizedPartiesResponse</a></code>
+- <code title="patch /v2/nvcf/authorizations/functions/{functionId}/versions/{functionVersionId}/add">client.authorizations.functions.versions.<a href="./src/nvcf/resources/authorizations/functions/versions.py">add</a>(function_version_id, \*, function_id, \*\*<a href="src/nvcf/types/authorizations/functions/version_add_params.py">params</a>) -> <a href="./src/nvcf/types/shared/authorized_parties.py">AuthorizedParties</a></code>
+- <code title="patch /v2/nvcf/authorizations/functions/{functionId}/versions/{functionVersionId}/remove">client.authorizations.functions.versions.<a href="./src/nvcf/resources/authorizations/functions/versions.py">remove</a>(function_version_id, \*, function_id, \*\*<a href="src/nvcf/types/authorizations/functions/version_remove_params.py">params</a>) -> <a href="./src/nvcf/types/shared/authorized_parties.py">AuthorizedParties</a></code>
 
 # Queues
 
@@ -187,13 +190,13 @@ Methods:
 
 Methods:
 
-- <code title="get /v2/nvcf/queues/functions/{functionId}">client.queues.functions.<a href="./src/nvcf/resources/queues/functions/functions.py">list</a>(function_id) -> <a href="./src/nvcf/types/shared/get_queues_response.py">GetQueuesResponse</a></code>
+- <code title="get /v2/nvcf/queues/functions/{functionId}">client.queues.functions.<a href="./src/nvcf/resources/queues/functions/functions.py">retrieve_all</a>(function_id) -> <a href="./src/nvcf/types/shared/queues.py">Queues</a></code>
 
 ### Versions
 
 Methods:
 
-- <code title="get /v2/nvcf/queues/functions/{functionId}/versions/{versionId}">client.queues.functions.versions.<a href="./src/nvcf/resources/queues/functions/versions.py">list</a>(version_id, \*, function_id) -> <a href="./src/nvcf/types/shared/get_queues_response.py">GetQueuesResponse</a></code>
+- <code title="get /v2/nvcf/queues/functions/{functionId}/versions/{versionId}">client.queues.functions.versions.<a href="./src/nvcf/resources/queues/functions/versions.py">retrieve_all</a>(version_id, \*, function_id) -> <a href="./src/nvcf/types/shared/queues.py">Queues</a></code>
 
 ## Position
 
@@ -233,7 +236,7 @@ from nvcf.types.cluster_groups_and_gpus import ClusterGroupsResponse
 
 Methods:
 
-- <code title="get /v2/nvcf/clusterGroups">client.cluster_groups_and_gpus.cluster_groups.<a href="./src/nvcf/resources/cluster_groups_and_gpus/cluster_groups.py">list</a>() -> <a href="./src/nvcf/types/cluster_groups_and_gpus/cluster_groups_response.py">ClusterGroupsResponse</a></code>
+- <code title="get /v2/nvcf/clusterGroups">client.cluster_groups_and_gpus.cluster_groups.<a href="./src/nvcf/resources/cluster_groups_and_gpus/cluster_groups.py">retrieve_all</a>() -> <a href="./src/nvcf/types/cluster_groups_and_gpus/cluster_groups_response.py">ClusterGroupsResponse</a></code>
 
 # ClientManagementForNVIDIASuperAdmins
 

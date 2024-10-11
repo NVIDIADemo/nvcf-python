@@ -27,7 +27,8 @@ from ...._response import (
 )
 from ...._base_client import make_request_options
 from ....types.authorizations import function_add_params, function_remove_params
-from ....types.shared.authorized_parties_response import AuthorizedPartiesResponse
+from ....types.shared.authorized_parties import AuthorizedParties
+from ....types.shared_params.authorized_party_dto import AuthorizedPartyDTO
 
 __all__ = ["FunctionsResource", "AsyncFunctionsResource"]
 
@@ -49,14 +50,14 @@ class FunctionsResource(SyncAPIResource):
         self,
         function_id: str,
         *,
-        authorized_party: function_add_params.AuthorizedParty,
+        authorized_party: AuthorizedPartyDTO,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AuthorizedPartiesResponse:
+    ) -> AuthorizedParties:
         """
         Adds the specified NVIDIA Cloud Account to the set of authorized accounts that
         are can invoke all the versions of the specified function. If the specified
@@ -86,21 +87,21 @@ class FunctionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=AuthorizedPartiesResponse,
+            cast_to=AuthorizedParties,
         )
 
     def remove(
         self,
         function_id: str,
         *,
-        authorized_party: function_remove_params.AuthorizedParty,
+        authorized_party: AuthorizedPartyDTO,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AuthorizedPartiesResponse:
+    ) -> AuthorizedParties:
         """
         Removes the specified NVIDIA Cloud Account from the set of authorized accounts
         that can invoke all the versions of the specified function. If the specified
@@ -130,7 +131,7 @@ class FunctionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=AuthorizedPartiesResponse,
+            cast_to=AuthorizedParties,
         )
 
 
@@ -151,14 +152,14 @@ class AsyncFunctionsResource(AsyncAPIResource):
         self,
         function_id: str,
         *,
-        authorized_party: function_add_params.AuthorizedParty,
+        authorized_party: AuthorizedPartyDTO,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AuthorizedPartiesResponse:
+    ) -> AuthorizedParties:
         """
         Adds the specified NVIDIA Cloud Account to the set of authorized accounts that
         are can invoke all the versions of the specified function. If the specified
@@ -190,21 +191,21 @@ class AsyncFunctionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=AuthorizedPartiesResponse,
+            cast_to=AuthorizedParties,
         )
 
     async def remove(
         self,
         function_id: str,
         *,
-        authorized_party: function_remove_params.AuthorizedParty,
+        authorized_party: AuthorizedPartyDTO,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AuthorizedPartiesResponse:
+    ) -> AuthorizedParties:
         """
         Removes the specified NVIDIA Cloud Account from the set of authorized accounts
         that can invoke all the versions of the specified function. If the specified
@@ -236,7 +237,7 @@ class AsyncFunctionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=AuthorizedPartiesResponse,
+            cast_to=AuthorizedParties,
         )
 
 

@@ -9,7 +9,7 @@ import pytest
 
 from nvcf import NVCF, AsyncNVCF
 from tests.utils import assert_matches_type
-from nvcf.types.shared import ListFunctionsResponse, CreateFunctionResponse
+from nvcf.types.shared import FunctionsResponse, CreateFunctionResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -111,34 +111,34 @@ class TestFunctions:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
-    def test_method_list(self, client: NVCF) -> None:
-        function = client.nvcf.functions.list()
-        assert_matches_type(ListFunctionsResponse, function, path=["response"])
+    def test_method_retrieve_all(self, client: NVCF) -> None:
+        function = client.nvcf.functions.retrieve_all()
+        assert_matches_type(FunctionsResponse, function, path=["response"])
 
     @parametrize
-    def test_method_list_with_all_params(self, client: NVCF) -> None:
-        function = client.nvcf.functions.list(
+    def test_method_retrieve_all_with_all_params(self, client: NVCF) -> None:
+        function = client.nvcf.functions.retrieve_all(
             visibility=["authorized"],
         )
-        assert_matches_type(ListFunctionsResponse, function, path=["response"])
+        assert_matches_type(FunctionsResponse, function, path=["response"])
 
     @parametrize
-    def test_raw_response_list(self, client: NVCF) -> None:
-        response = client.nvcf.functions.with_raw_response.list()
+    def test_raw_response_retrieve_all(self, client: NVCF) -> None:
+        response = client.nvcf.functions.with_raw_response.retrieve_all()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         function = response.parse()
-        assert_matches_type(ListFunctionsResponse, function, path=["response"])
+        assert_matches_type(FunctionsResponse, function, path=["response"])
 
     @parametrize
-    def test_streaming_response_list(self, client: NVCF) -> None:
-        with client.nvcf.functions.with_streaming_response.list() as response:
+    def test_streaming_response_retrieve_all(self, client: NVCF) -> None:
+        with client.nvcf.functions.with_streaming_response.retrieve_all() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             function = response.parse()
-            assert_matches_type(ListFunctionsResponse, function, path=["response"])
+            assert_matches_type(FunctionsResponse, function, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -240,33 +240,33 @@ class TestAsyncFunctions:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
-    async def test_method_list(self, async_client: AsyncNVCF) -> None:
-        function = await async_client.nvcf.functions.list()
-        assert_matches_type(ListFunctionsResponse, function, path=["response"])
+    async def test_method_retrieve_all(self, async_client: AsyncNVCF) -> None:
+        function = await async_client.nvcf.functions.retrieve_all()
+        assert_matches_type(FunctionsResponse, function, path=["response"])
 
     @parametrize
-    async def test_method_list_with_all_params(self, async_client: AsyncNVCF) -> None:
-        function = await async_client.nvcf.functions.list(
+    async def test_method_retrieve_all_with_all_params(self, async_client: AsyncNVCF) -> None:
+        function = await async_client.nvcf.functions.retrieve_all(
             visibility=["authorized"],
         )
-        assert_matches_type(ListFunctionsResponse, function, path=["response"])
+        assert_matches_type(FunctionsResponse, function, path=["response"])
 
     @parametrize
-    async def test_raw_response_list(self, async_client: AsyncNVCF) -> None:
-        response = await async_client.nvcf.functions.with_raw_response.list()
+    async def test_raw_response_retrieve_all(self, async_client: AsyncNVCF) -> None:
+        response = await async_client.nvcf.functions.with_raw_response.retrieve_all()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         function = await response.parse()
-        assert_matches_type(ListFunctionsResponse, function, path=["response"])
+        assert_matches_type(FunctionsResponse, function, path=["response"])
 
     @parametrize
-    async def test_streaming_response_list(self, async_client: AsyncNVCF) -> None:
-        async with async_client.nvcf.functions.with_streaming_response.list() as response:
+    async def test_streaming_response_retrieve_all(self, async_client: AsyncNVCF) -> None:
+        async with async_client.nvcf.functions.with_streaming_response.retrieve_all() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             function = await response.parse()
-            assert_matches_type(ListFunctionsResponse, function, path=["response"])
+            assert_matches_type(FunctionsResponse, function, path=["response"])
 
         assert cast(Any, response.is_closed) is True

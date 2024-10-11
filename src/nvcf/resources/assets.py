@@ -80,7 +80,7 @@ class AssetsResource(SyncAPIResource):
             cast_to=CreateAssetResponse,
         )
 
-    def list(
+    def retrieve_all(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -159,7 +159,7 @@ class AsyncAssetsResource(AsyncAPIResource):
             cast_to=CreateAssetResponse,
         )
 
-    async def list(
+    async def retrieve_all(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -190,8 +190,8 @@ class AssetsResourceWithRawResponse:
         self.create = to_raw_response_wrapper(
             assets.create,
         )
-        self.list = to_raw_response_wrapper(
-            assets.list,
+        self.retrieve_all = to_raw_response_wrapper(
+            assets.retrieve_all,
         )
 
 
@@ -202,8 +202,8 @@ class AsyncAssetsResourceWithRawResponse:
         self.create = async_to_raw_response_wrapper(
             assets.create,
         )
-        self.list = async_to_raw_response_wrapper(
-            assets.list,
+        self.retrieve_all = async_to_raw_response_wrapper(
+            assets.retrieve_all,
         )
 
 
@@ -214,8 +214,8 @@ class AssetsResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             assets.create,
         )
-        self.list = to_streamed_response_wrapper(
-            assets.list,
+        self.retrieve_all = to_streamed_response_wrapper(
+            assets.retrieve_all,
         )
 
 
@@ -226,6 +226,6 @@ class AsyncAssetsResourceWithStreamingResponse:
         self.create = async_to_streamed_response_wrapper(
             assets.create,
         )
-        self.list = async_to_streamed_response_wrapper(
-            assets.list,
+        self.retrieve_all = async_to_streamed_response_wrapper(
+            assets.retrieve_all,
         )

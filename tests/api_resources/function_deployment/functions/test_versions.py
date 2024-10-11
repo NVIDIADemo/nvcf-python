@@ -9,7 +9,7 @@ import pytest
 
 from nvcf import NVCF, AsyncNVCF
 from tests.utils import assert_matches_type
-from nvcf.types.shared import FunctionResponse
+from nvcf.types.shared import Function
 from nvcf.types.function_deployment.functions import (
     DeploymentResponse,
 )
@@ -370,7 +370,7 @@ class TestVersions:
             function_version_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             function_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
-        assert_matches_type(FunctionResponse, version, path=["response"])
+        assert_matches_type(Function, version, path=["response"])
 
     @parametrize
     def test_method_delete_with_all_params(self, client: NVCF) -> None:
@@ -379,7 +379,7 @@ class TestVersions:
             function_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             graceful=True,
         )
-        assert_matches_type(FunctionResponse, version, path=["response"])
+        assert_matches_type(Function, version, path=["response"])
 
     @parametrize
     def test_raw_response_delete(self, client: NVCF) -> None:
@@ -391,7 +391,7 @@ class TestVersions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         version = response.parse()
-        assert_matches_type(FunctionResponse, version, path=["response"])
+        assert_matches_type(Function, version, path=["response"])
 
     @parametrize
     def test_streaming_response_delete(self, client: NVCF) -> None:
@@ -403,7 +403,7 @@ class TestVersions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             version = response.parse()
-            assert_matches_type(FunctionResponse, version, path=["response"])
+            assert_matches_type(Function, version, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -775,7 +775,7 @@ class TestAsyncVersions:
             function_version_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             function_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
-        assert_matches_type(FunctionResponse, version, path=["response"])
+        assert_matches_type(Function, version, path=["response"])
 
     @parametrize
     async def test_method_delete_with_all_params(self, async_client: AsyncNVCF) -> None:
@@ -784,7 +784,7 @@ class TestAsyncVersions:
             function_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             graceful=True,
         )
-        assert_matches_type(FunctionResponse, version, path=["response"])
+        assert_matches_type(Function, version, path=["response"])
 
     @parametrize
     async def test_raw_response_delete(self, async_client: AsyncNVCF) -> None:
@@ -796,7 +796,7 @@ class TestAsyncVersions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         version = await response.parse()
-        assert_matches_type(FunctionResponse, version, path=["response"])
+        assert_matches_type(Function, version, path=["response"])
 
     @parametrize
     async def test_streaming_response_delete(self, async_client: AsyncNVCF) -> None:
@@ -808,7 +808,7 @@ class TestAsyncVersions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             version = await response.parse()
-            assert_matches_type(FunctionResponse, version, path=["response"])
+            assert_matches_type(Function, version, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
