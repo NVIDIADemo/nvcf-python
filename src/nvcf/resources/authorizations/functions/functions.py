@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Iterable
+
 import httpx
 
 from .versions import (
@@ -26,9 +28,10 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.authorizations import function_add_params, function_remove_params
+from ....types.authorizations import function_add_params, function_remove_params, function_authorize_params
 from ....types.shared.authorized_parties import AuthorizedParties
 from ....types.shared_params.authorized_party_dto import AuthorizedPartyDTO
+from ....types.authorizations.list_authorized_parties_response import ListAuthorizedPartiesResponse
 
 __all__ = ["FunctionsResource", "AsyncFunctionsResource"]
 
@@ -56,6 +59,44 @@ class FunctionsResource(SyncAPIResource):
         For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
         """
         return FunctionsResourceWithStreamingResponse(self)
+
+    def delete(
+        self,
+        function_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> AuthorizedParties:
+        """
+        Deletes all the extra NVIDIA Cloud Accounts that were authorized to invoke the
+        function and all its versions. If a function version has its own set of
+        authorized accounts, those are not deleted. If the specified function is public,
+        then Account Admin cannot perform this operation. Access to this functionality
+        mandates the inclusion of a bearer token with the 'authorize_clients' scope in
+        the HTTP Authorization header
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not function_id:
+            raise ValueError(f"Expected a non-empty value for `function_id` but received {function_id!r}")
+        return self._delete(
+            f"/v2/nvcf/authorizations/functions/{function_id}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AuthorizedParties,
+        )
 
     def add(
         self,
@@ -95,6 +136,51 @@ class FunctionsResource(SyncAPIResource):
         return self._patch(
             f"/v2/nvcf/authorizations/functions/{function_id}/add",
             body=maybe_transform({"authorized_party": authorized_party}, function_add_params.FunctionAddParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AuthorizedParties,
+        )
+
+    def authorize(
+        self,
+        function_id: str,
+        *,
+        authorized_parties: Iterable[AuthorizedPartyDTO],
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> AuthorizedParties:
+        """
+        Authorizes additional NVIDIA Cloud Accounts to invoke any version of the
+        specified function. By default, a function belongs to the NVIDIA Cloud Account
+        that created it, and the credentials used for function invocation must reference
+        the same NVIDIA Cloud Account. Upon invocation of this endpoint, any existing
+        authorized accounts will be overwritten by the newly specified authorized
+        accounts. Access to this functionality mandates the inclusion of a bearer token
+        with the 'authorize_clients' scope in the HTTP Authorization header
+
+        Args:
+          authorized_parties: Parties authorized to invoke function
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not function_id:
+            raise ValueError(f"Expected a non-empty value for `function_id` but received {function_id!r}")
+        return self._post(
+            f"/v2/nvcf/authorizations/functions/{function_id}",
+            body=maybe_transform(
+                {"authorized_parties": authorized_parties}, function_authorize_params.FunctionAuthorizeParams
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -145,6 +231,44 @@ class FunctionsResource(SyncAPIResource):
             cast_to=AuthorizedParties,
         )
 
+    def retrieve_all(
+        self,
+        function_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ListAuthorizedPartiesResponse:
+        """
+        Lists NVIDIA Cloud Account IDs that are authorized to invoke any version of the
+        specified function. The response includes an array showing authorized accounts
+        for each version. Individual versions of a function can have their own
+        authorized accounts. So, each object in the array can have different authorized
+        accounts listed. Access to this functionality mandates the inclusion of a bearer
+        token with the 'authorize_clients' scope in the HTTP Authorization header
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not function_id:
+            raise ValueError(f"Expected a non-empty value for `function_id` but received {function_id!r}")
+        return self._get(
+            f"/v2/nvcf/authorizations/functions/{function_id}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ListAuthorizedPartiesResponse,
+        )
+
 
 class AsyncFunctionsResource(AsyncAPIResource):
     @cached_property
@@ -169,6 +293,44 @@ class AsyncFunctionsResource(AsyncAPIResource):
         For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
         """
         return AsyncFunctionsResourceWithStreamingResponse(self)
+
+    async def delete(
+        self,
+        function_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> AuthorizedParties:
+        """
+        Deletes all the extra NVIDIA Cloud Accounts that were authorized to invoke the
+        function and all its versions. If a function version has its own set of
+        authorized accounts, those are not deleted. If the specified function is public,
+        then Account Admin cannot perform this operation. Access to this functionality
+        mandates the inclusion of a bearer token with the 'authorize_clients' scope in
+        the HTTP Authorization header
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not function_id:
+            raise ValueError(f"Expected a non-empty value for `function_id` but received {function_id!r}")
+        return await self._delete(
+            f"/v2/nvcf/authorizations/functions/{function_id}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AuthorizedParties,
+        )
 
     async def add(
         self,
@@ -209,6 +371,51 @@ class AsyncFunctionsResource(AsyncAPIResource):
             f"/v2/nvcf/authorizations/functions/{function_id}/add",
             body=await async_maybe_transform(
                 {"authorized_party": authorized_party}, function_add_params.FunctionAddParams
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AuthorizedParties,
+        )
+
+    async def authorize(
+        self,
+        function_id: str,
+        *,
+        authorized_parties: Iterable[AuthorizedPartyDTO],
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> AuthorizedParties:
+        """
+        Authorizes additional NVIDIA Cloud Accounts to invoke any version of the
+        specified function. By default, a function belongs to the NVIDIA Cloud Account
+        that created it, and the credentials used for function invocation must reference
+        the same NVIDIA Cloud Account. Upon invocation of this endpoint, any existing
+        authorized accounts will be overwritten by the newly specified authorized
+        accounts. Access to this functionality mandates the inclusion of a bearer token
+        with the 'authorize_clients' scope in the HTTP Authorization header
+
+        Args:
+          authorized_parties: Parties authorized to invoke function
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not function_id:
+            raise ValueError(f"Expected a non-empty value for `function_id` but received {function_id!r}")
+        return await self._post(
+            f"/v2/nvcf/authorizations/functions/{function_id}",
+            body=await async_maybe_transform(
+                {"authorized_parties": authorized_parties}, function_authorize_params.FunctionAuthorizeParams
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -262,16 +469,63 @@ class AsyncFunctionsResource(AsyncAPIResource):
             cast_to=AuthorizedParties,
         )
 
+    async def retrieve_all(
+        self,
+        function_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+    ) -> ListAuthorizedPartiesResponse:
+        """
+        Lists NVIDIA Cloud Account IDs that are authorized to invoke any version of the
+        specified function. The response includes an array showing authorized accounts
+        for each version. Individual versions of a function can have their own
+        authorized accounts. So, each object in the array can have different authorized
+        accounts listed. Access to this functionality mandates the inclusion of a bearer
+        token with the 'authorize_clients' scope in the HTTP Authorization header
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not function_id:
+            raise ValueError(f"Expected a non-empty value for `function_id` but received {function_id!r}")
+        return await self._get(
+            f"/v2/nvcf/authorizations/functions/{function_id}",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ListAuthorizedPartiesResponse,
+        )
+
 
 class FunctionsResourceWithRawResponse:
     def __init__(self, functions: FunctionsResource) -> None:
         self._functions = functions
 
+        self.delete = to_raw_response_wrapper(
+            functions.delete,
+        )
         self.add = to_raw_response_wrapper(
             functions.add,
         )
+        self.authorize = to_raw_response_wrapper(
+            functions.authorize,
+        )
         self.remove = to_raw_response_wrapper(
             functions.remove,
+        )
+        self.retrieve_all = to_raw_response_wrapper(
+            functions.retrieve_all,
         )
 
     @cached_property
@@ -283,11 +537,20 @@ class AsyncFunctionsResourceWithRawResponse:
     def __init__(self, functions: AsyncFunctionsResource) -> None:
         self._functions = functions
 
+        self.delete = async_to_raw_response_wrapper(
+            functions.delete,
+        )
         self.add = async_to_raw_response_wrapper(
             functions.add,
         )
+        self.authorize = async_to_raw_response_wrapper(
+            functions.authorize,
+        )
         self.remove = async_to_raw_response_wrapper(
             functions.remove,
+        )
+        self.retrieve_all = async_to_raw_response_wrapper(
+            functions.retrieve_all,
         )
 
     @cached_property
@@ -299,11 +562,20 @@ class FunctionsResourceWithStreamingResponse:
     def __init__(self, functions: FunctionsResource) -> None:
         self._functions = functions
 
+        self.delete = to_streamed_response_wrapper(
+            functions.delete,
+        )
         self.add = to_streamed_response_wrapper(
             functions.add,
         )
+        self.authorize = to_streamed_response_wrapper(
+            functions.authorize,
+        )
         self.remove = to_streamed_response_wrapper(
             functions.remove,
+        )
+        self.retrieve_all = to_streamed_response_wrapper(
+            functions.retrieve_all,
         )
 
     @cached_property
@@ -315,11 +587,20 @@ class AsyncFunctionsResourceWithStreamingResponse:
     def __init__(self, functions: AsyncFunctionsResource) -> None:
         self._functions = functions
 
+        self.delete = async_to_streamed_response_wrapper(
+            functions.delete,
+        )
         self.add = async_to_streamed_response_wrapper(
             functions.add,
         )
+        self.authorize = async_to_streamed_response_wrapper(
+            functions.authorize,
+        )
         self.remove = async_to_streamed_response_wrapper(
             functions.remove,
+        )
+        self.retrieve_all = async_to_streamed_response_wrapper(
+            functions.retrieve_all,
         )
 
     @cached_property
