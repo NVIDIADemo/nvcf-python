@@ -22,7 +22,7 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.shared.queues import Queues
+from ....types.shared.queues_response import QueuesResponse
 
 __all__ = ["FunctionsResource", "AsyncFunctionsResource"]
 
@@ -50,7 +50,7 @@ class FunctionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Queues:
+    ) -> QueuesResponse:
         """Provides details of all the queues associated with the specified function.
 
         If a
@@ -75,7 +75,7 @@ class FunctionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Queues,
+            cast_to=QueuesResponse,
         )
 
 
@@ -102,7 +102,7 @@ class AsyncFunctionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Queues:
+    ) -> QueuesResponse:
         """Provides details of all the queues associated with the specified function.
 
         If a
@@ -127,7 +127,7 @@ class AsyncFunctionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=Queues,
+            cast_to=QueuesResponse,
         )
 
 
