@@ -9,7 +9,7 @@ import pytest
 
 from nvcf import NVCF, AsyncNVCF
 from tests.utils import assert_matches_type
-from nvcf.types.shared import Queues
+from nvcf.types.shared import QueuesResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -23,7 +23,7 @@ class TestVersions:
             version_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             function_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
-        assert_matches_type(Queues, version, path=["response"])
+        assert_matches_type(QueuesResponse, version, path=["response"])
 
     @parametrize
     def test_raw_response_retrieve_all(self, client: NVCF) -> None:
@@ -35,7 +35,7 @@ class TestVersions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         version = response.parse()
-        assert_matches_type(Queues, version, path=["response"])
+        assert_matches_type(QueuesResponse, version, path=["response"])
 
     @parametrize
     def test_streaming_response_retrieve_all(self, client: NVCF) -> None:
@@ -47,7 +47,7 @@ class TestVersions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             version = response.parse()
-            assert_matches_type(Queues, version, path=["response"])
+            assert_matches_type(QueuesResponse, version, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -75,7 +75,7 @@ class TestAsyncVersions:
             version_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             function_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
-        assert_matches_type(Queues, version, path=["response"])
+        assert_matches_type(QueuesResponse, version, path=["response"])
 
     @parametrize
     async def test_raw_response_retrieve_all(self, async_client: AsyncNVCF) -> None:
@@ -87,7 +87,7 @@ class TestAsyncVersions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         version = await response.parse()
-        assert_matches_type(Queues, version, path=["response"])
+        assert_matches_type(QueuesResponse, version, path=["response"])
 
     @parametrize
     async def test_streaming_response_retrieve_all(self, async_client: AsyncNVCF) -> None:
@@ -99,7 +99,7 @@ class TestAsyncVersions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             version = await response.parse()
-            assert_matches_type(Queues, version, path=["response"])
+            assert_matches_type(QueuesResponse, version, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

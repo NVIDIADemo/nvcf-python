@@ -9,7 +9,7 @@ import pytest
 
 from nvcf import NVCF, AsyncNVCF
 from tests.utils import assert_matches_type
-from nvcf.types.shared import Queues
+from nvcf.types.shared import QueuesResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -22,7 +22,7 @@ class TestFunctions:
         function = client.queues.functions.retrieve_all(
             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
-        assert_matches_type(Queues, function, path=["response"])
+        assert_matches_type(QueuesResponse, function, path=["response"])
 
     @parametrize
     def test_raw_response_retrieve_all(self, client: NVCF) -> None:
@@ -33,7 +33,7 @@ class TestFunctions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         function = response.parse()
-        assert_matches_type(Queues, function, path=["response"])
+        assert_matches_type(QueuesResponse, function, path=["response"])
 
     @parametrize
     def test_streaming_response_retrieve_all(self, client: NVCF) -> None:
@@ -44,7 +44,7 @@ class TestFunctions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             function = response.parse()
-            assert_matches_type(Queues, function, path=["response"])
+            assert_matches_type(QueuesResponse, function, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -64,7 +64,7 @@ class TestAsyncFunctions:
         function = await async_client.queues.functions.retrieve_all(
             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
-        assert_matches_type(Queues, function, path=["response"])
+        assert_matches_type(QueuesResponse, function, path=["response"])
 
     @parametrize
     async def test_raw_response_retrieve_all(self, async_client: AsyncNVCF) -> None:
@@ -75,7 +75,7 @@ class TestAsyncFunctions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         function = await response.parse()
-        assert_matches_type(Queues, function, path=["response"])
+        assert_matches_type(QueuesResponse, function, path=["response"])
 
     @parametrize
     async def test_streaming_response_retrieve_all(self, async_client: AsyncNVCF) -> None:
@@ -86,7 +86,7 @@ class TestAsyncFunctions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             function = await response.parse()
-            assert_matches_type(Queues, function, path=["response"])
+            assert_matches_type(QueuesResponse, function, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
