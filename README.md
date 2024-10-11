@@ -15,9 +15,12 @@ The REST API documentation can be found on [www.nvidia.com](https://www.nvidia.c
 ## Installation
 
 ```sh
-# install from PyPI
-pip install --pre nvcf
+# install from the production repo
+pip install git+ssh://git@github.com/NVIDIADemo/nvcf-python.git
 ```
+
+> [!NOTE]
+> Once this package is [published to PyPI](https://app.stainlessapi.com/docs/guides/publish), this will become: `pip install --pre nvcf`
 
 ## Usage
 
