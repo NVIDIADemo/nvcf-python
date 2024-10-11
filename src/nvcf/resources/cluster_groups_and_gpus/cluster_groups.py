@@ -22,10 +22,21 @@ __all__ = ["ClusterGroupsResource", "AsyncClusterGroupsResource"]
 class ClusterGroupsResource(SyncAPIResource):
     @cached_property
     def with_raw_response(self) -> ClusterGroupsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return ClusterGroupsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> ClusterGroupsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return ClusterGroupsResourceWithStreamingResponse(self)
 
     def retrieve_all(
@@ -57,10 +68,21 @@ class ClusterGroupsResource(SyncAPIResource):
 class AsyncClusterGroupsResource(AsyncAPIResource):
     @cached_property
     def with_raw_response(self) -> AsyncClusterGroupsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return AsyncClusterGroupsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> AsyncClusterGroupsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return AsyncClusterGroupsResourceWithStreamingResponse(self)
 
     async def retrieve_all(
