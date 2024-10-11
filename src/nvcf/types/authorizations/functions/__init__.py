@@ -4,3 +4,4 @@ from __future__ import annotations
 
 from .version_add_params import VersionAddParams as VersionAddParams
 from .version_remove_params import VersionRemoveParams as VersionRemoveParams
+from .version_authorize_params import VersionAuthorizeParams as VersionAuthorizeParams
