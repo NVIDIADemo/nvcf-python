@@ -119,7 +119,7 @@ Methods:
 
 Methods:
 
-- <code title="post /v2/nvcf/functions">client.functions.<a href="./src/nvcf/resources/functions/functions.py">create</a>(\*\*<a href="src/nvcf/types/function_create_params.py">params</a>) -> <a href="./src/nvcf/types/shared/create_function_response.py">CreateFunctionResponse</a></code>
+- <code title="post /v2/nvcf/functions">client.functions.<a href="./src/nvcf/resources/functions/functions.py">create</a>(\*\*<a href="src/nvcf/types/function_create_params.py">params</a>) -> <a href="./src/nvcf/types/shared/function_dto.py">FunctionDTO</a></code>
 - <code title="get /v2/nvcf/functions">client.functions.<a href="./src/nvcf/resources/functions/functions.py">retrieve_all</a>(\*\*<a href="src/nvcf/types/function_retrieve_all_params.py">params</a>) -> <a href="./src/nvcf/types/shared/functions_response.py">FunctionsResponse</a></code>
 
 ## Versions
