@@ -7,9 +7,9 @@ from typing import Any, cast
 
 import pytest
 
+from nvcf import NVCF, AsyncNVCF
 from tests.utils import assert_matches_type
-from nvidia_cloud_functions import NvidiaCloudFunctions, AsyncNvidiaCloudFunctions
-from nvidia_cloud_functions.types.cluster_groups_and_gpus import ClusterGroupsResponse
+from nvcf.types.cluster_groups_and_gpus import ClusterGroupsResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -18,12 +18,12 @@ class TestClusterGroups:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
     @parametrize
-    def test_method_list(self, client: NvidiaCloudFunctions) -> None:
+    def test_method_list(self, client: NVCF) -> None:
         cluster_group = client.cluster_groups_and_gpus.cluster_groups.list()
         assert_matches_type(ClusterGroupsResponse, cluster_group, path=["response"])
 
     @parametrize
-    def test_raw_response_list(self, client: NvidiaCloudFunctions) -> None:
+    def test_raw_response_list(self, client: NVCF) -> None:
         response = client.cluster_groups_and_gpus.cluster_groups.with_raw_response.list()
 
         assert response.is_closed is True
@@ -32,7 +32,7 @@ class TestClusterGroups:
         assert_matches_type(ClusterGroupsResponse, cluster_group, path=["response"])
 
     @parametrize
-    def test_streaming_response_list(self, client: NvidiaCloudFunctions) -> None:
+    def test_streaming_response_list(self, client: NVCF) -> None:
         with client.cluster_groups_and_gpus.cluster_groups.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -47,12 +47,12 @@ class TestAsyncClusterGroups:
     parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
 
     @parametrize
-    async def test_method_list(self, async_client: AsyncNvidiaCloudFunctions) -> None:
+    async def test_method_list(self, async_client: AsyncNVCF) -> None:
         cluster_group = await async_client.cluster_groups_and_gpus.cluster_groups.list()
         assert_matches_type(ClusterGroupsResponse, cluster_group, path=["response"])
 
     @parametrize
-    async def test_raw_response_list(self, async_client: AsyncNvidiaCloudFunctions) -> None:
+    async def test_raw_response_list(self, async_client: AsyncNVCF) -> None:
         response = await async_client.cluster_groups_and_gpus.cluster_groups.with_raw_response.list()
 
         assert response.is_closed is True
@@ -61,7 +61,7 @@ class TestAsyncClusterGroups:
         assert_matches_type(ClusterGroupsResponse, cluster_group, path=["response"])
 
     @parametrize
-    async def test_streaming_response_list(self, async_client: AsyncNvidiaCloudFunctions) -> None:
+    async def test_streaming_response_list(self, async_client: AsyncNVCF) -> None:
         async with async_client.cluster_groups_and_gpus.cluster_groups.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

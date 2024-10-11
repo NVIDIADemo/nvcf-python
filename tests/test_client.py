@@ -16,20 +16,17 @@ import pytest
 from respx import MockRouter
 from pydantic import ValidationError
 
-from nvidia_cloud_functions import NvidiaCloudFunctions, AsyncNvidiaCloudFunctions, APIResponseValidationError
-from nvidia_cloud_functions._models import BaseModel, FinalRequestOptions
-from nvidia_cloud_functions._constants import RAW_RESPONSE_HEADER
-from nvidia_cloud_functions._exceptions import APIStatusError, APITimeoutError, APIResponseValidationError
-from nvidia_cloud_functions._base_client import (
-    DEFAULT_TIMEOUT,
-    HTTPX_DEFAULT_TIMEOUT,
-    BaseClient,
-    make_request_options,
-)
+from nvcf import NVCF, AsyncNVCF, APIResponseValidationError
+from nvcf._types import Omit
+from nvcf._models import BaseModel, FinalRequestOptions
+from nvcf._constants import RAW_RESPONSE_HEADER
+from nvcf._exceptions import NVCFError, APIStatusError, APITimeoutError, APIResponseValidationError
+from nvcf._base_client import DEFAULT_TIMEOUT, HTTPX_DEFAULT_TIMEOUT, BaseClient, make_request_options
 
 from .utils import update_env
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
+auth_token = "My Auth Token"
 
 
 def _get_params(client: BaseClient[Any, Any]) -> dict[str, str]:
@@ -42,7 +39,7 @@ def _low_retry_timeout(*_args: Any, **_kwargs: Any) -> float:
     return 0.1
 
 
-def _get_open_connections(client: NvidiaCloudFunctions | AsyncNvidiaCloudFunctions) -> int:
+def _get_open_connections(client: NVCF | AsyncNVCF) -> int:
     transport = client._client._transport
     assert isinstance(transport, httpx.HTTPTransport) or isinstance(transport, httpx.AsyncHTTPTransport)
 
@@ -50,8 +47,8 @@ def _get_open_connections(client: NvidiaCloudFunctions | AsyncNvidiaCloudFunctio
     return len(pool._requests)
 
 
-class TestNvidiaCloudFunctions:
-    client = NvidiaCloudFunctions(base_url=base_url, _strict_response_validation=True)
+class TestNVCF:
+    client = NVCF(base_url=base_url, auth_token=auth_token, _strict_response_validation=True)
 
     @pytest.mark.respx(base_url=base_url)
     def test_raw_response(self, respx_mock: MockRouter) -> None:
@@ -77,6 +74,10 @@ class TestNvidiaCloudFunctions:
         copied = self.client.copy()
         assert id(copied) != id(self.client)
 
+        copied = self.client.copy(auth_token="another My Auth Token")
+        assert copied.auth_token == "another My Auth Token"
+        assert self.client.auth_token == "My Auth Token"
+
     def test_copy_default_options(self) -> None:
         # options that have a default are overridden correctly
         copied = self.client.copy(max_retries=7)
@@ -94,8 +95,8 @@ class TestNvidiaCloudFunctions:
         assert isinstance(self.client.timeout, httpx.Timeout)
 
     def test_copy_default_headers(self) -> None:
-        client = NvidiaCloudFunctions(
-            base_url=base_url, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
+        client = NVCF(
+            base_url=base_url, auth_token=auth_token, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         assert client.default_headers["X-Foo"] == "bar"
 
@@ -128,7 +129,9 @@ class TestNvidiaCloudFunctions:
             client.copy(set_default_headers={}, default_headers={"X-Foo": "Bar"})
 
     def test_copy_default_query(self) -> None:
-        client = NvidiaCloudFunctions(base_url=base_url, _strict_response_validation=True, default_query={"foo": "bar"})
+        client = NVCF(
+            base_url=base_url, auth_token=auth_token, _strict_response_validation=True, default_query={"foo": "bar"}
+        )
         assert _get_params(client)["foo"] == "bar"
 
         # does not override the already given value when not specified
@@ -217,10 +220,10 @@ class TestNvidiaCloudFunctions:
                         # to_raw_response_wrapper leaks through the @functools.wraps() decorator.
                         #
                         # removing the decorator fixes the leak for reasons we don't understand.
-                        "nvidia_cloud_functions/_legacy_response.py",
-                        "nvidia_cloud_functions/_response.py",
+                        "nvcf/_legacy_response.py",
+                        "nvcf/_response.py",
                         # pydantic.BaseModel.model_dump || pydantic.BaseModel.dict leak memory for some reason.
-                        "nvidia_cloud_functions/_compat.py",
+                        "nvcf/_compat.py",
                         # Standard library leaks we don't care about.
                         "/logging/__init__.py",
                     ]
@@ -251,7 +254,9 @@ class TestNvidiaCloudFunctions:
         assert timeout == httpx.Timeout(100.0)
 
     def test_client_timeout_option(self) -> None:
-        client = NvidiaCloudFunctions(base_url=base_url, _strict_response_validation=True, timeout=httpx.Timeout(0))
+        client = NVCF(
+            base_url=base_url, auth_token=auth_token, _strict_response_validation=True, timeout=httpx.Timeout(0)
+        )
 
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -260,7 +265,9 @@ class TestNvidiaCloudFunctions:
     def test_http_client_timeout_option(self) -> None:
         # custom timeout given to the httpx client should be used
         with httpx.Client(timeout=None) as http_client:
-            client = NvidiaCloudFunctions(base_url=base_url, _strict_response_validation=True, http_client=http_client)
+            client = NVCF(
+                base_url=base_url, auth_token=auth_token, _strict_response_validation=True, http_client=http_client
+            )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -268,7 +275,9 @@ class TestNvidiaCloudFunctions:
 
         # no timeout given to the httpx client should not use the httpx default
         with httpx.Client() as http_client:
-            client = NvidiaCloudFunctions(base_url=base_url, _strict_response_validation=True, http_client=http_client)
+            client = NVCF(
+                base_url=base_url, auth_token=auth_token, _strict_response_validation=True, http_client=http_client
+            )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -276,7 +285,9 @@ class TestNvidiaCloudFunctions:
 
         # explicitly passing the default timeout currently results in it being ignored
         with httpx.Client(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
-            client = NvidiaCloudFunctions(base_url=base_url, _strict_response_validation=True, http_client=http_client)
+            client = NVCF(
+                base_url=base_url, auth_token=auth_token, _strict_response_validation=True, http_client=http_client
+            )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
@@ -285,20 +296,24 @@ class TestNvidiaCloudFunctions:
     async def test_invalid_http_client(self) -> None:
         with pytest.raises(TypeError, match="Invalid `http_client` arg"):
             async with httpx.AsyncClient() as http_client:
-                NvidiaCloudFunctions(
-                    base_url=base_url, _strict_response_validation=True, http_client=cast(Any, http_client)
+                NVCF(
+                    base_url=base_url,
+                    auth_token=auth_token,
+                    _strict_response_validation=True,
+                    http_client=cast(Any, http_client),
                 )
 
     def test_default_headers_option(self) -> None:
-        client = NvidiaCloudFunctions(
-            base_url=base_url, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
+        client = NVCF(
+            base_url=base_url, auth_token=auth_token, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "bar"
         assert request.headers.get("x-stainless-lang") == "python"
 
-        client2 = NvidiaCloudFunctions(
+        client2 = NVCF(
             base_url=base_url,
+            auth_token=auth_token,
             _strict_response_validation=True,
             default_headers={
                 "X-Foo": "stainless",
@@ -309,9 +324,22 @@ class TestNvidiaCloudFunctions:
         assert request.headers.get("x-foo") == "stainless"
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
 
+    def test_validate_headers(self) -> None:
+        client = NVCF(base_url=base_url, auth_token=auth_token, _strict_response_validation=True)
+        request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
+        assert request.headers.get("Authorization") == f"Bearer {auth_token}"
+
+        with pytest.raises(NVCFError):
+            with update_env(**{"NVCF_AUTH_TOKEN": Omit()}):
+                client2 = NVCF(base_url=base_url, auth_token=None, _strict_response_validation=True)
+            _ = client2
+
     def test_default_query_option(self) -> None:
-        client = NvidiaCloudFunctions(
-            base_url=base_url, _strict_response_validation=True, default_query={"query_param": "bar"}
+        client = NVCF(
+            base_url=base_url,
+            auth_token=auth_token,
+            _strict_response_validation=True,
+            default_query={"query_param": "bar"},
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         url = httpx.URL(request.url)
@@ -424,7 +452,7 @@ class TestNvidiaCloudFunctions:
         params = dict(request.url.params)
         assert params == {"foo": "2"}
 
-    def test_multipart_repeating_array(self, client: NvidiaCloudFunctions) -> None:
+    def test_multipart_repeating_array(self, client: NVCF) -> None:
         request = client._build_request(
             FinalRequestOptions.construct(
                 method="get",
@@ -511,7 +539,7 @@ class TestNvidiaCloudFunctions:
         assert response.foo == 2
 
     def test_base_url_setter(self) -> None:
-        client = NvidiaCloudFunctions(base_url="https://example.com/from_init", _strict_response_validation=True)
+        client = NVCF(base_url="https://example.com/from_init", auth_token=auth_token, _strict_response_validation=True)
         assert client.base_url == "https://example.com/from_init/"
 
         client.base_url = "https://example.com/from_setter"  # type: ignore[assignment]
@@ -519,23 +547,26 @@ class TestNvidiaCloudFunctions:
         assert client.base_url == "https://example.com/from_setter/"
 
     def test_base_url_env(self) -> None:
-        with update_env(NVIDIA_CLOUD_FUNCTIONS_BASE_URL="http://localhost:5000/from/env"):
-            client = NvidiaCloudFunctions(_strict_response_validation=True)
+        with update_env(NVCF_BASE_URL="http://localhost:5000/from/env"):
+            client = NVCF(auth_token=auth_token, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
     @pytest.mark.parametrize(
         "client",
         [
-            NvidiaCloudFunctions(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
-            NvidiaCloudFunctions(
+            NVCF(
+                base_url="http://localhost:5000/custom/path/", auth_token=auth_token, _strict_response_validation=True
+            ),
+            NVCF(
                 base_url="http://localhost:5000/custom/path/",
+                auth_token=auth_token,
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
             ),
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_trailing_slash(self, client: NvidiaCloudFunctions) -> None:
+    def test_base_url_trailing_slash(self, client: NVCF) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -548,16 +579,19 @@ class TestNvidiaCloudFunctions:
     @pytest.mark.parametrize(
         "client",
         [
-            NvidiaCloudFunctions(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
-            NvidiaCloudFunctions(
+            NVCF(
+                base_url="http://localhost:5000/custom/path/", auth_token=auth_token, _strict_response_validation=True
+            ),
+            NVCF(
                 base_url="http://localhost:5000/custom/path/",
+                auth_token=auth_token,
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
             ),
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_no_trailing_slash(self, client: NvidiaCloudFunctions) -> None:
+    def test_base_url_no_trailing_slash(self, client: NVCF) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -570,16 +604,19 @@ class TestNvidiaCloudFunctions:
     @pytest.mark.parametrize(
         "client",
         [
-            NvidiaCloudFunctions(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
-            NvidiaCloudFunctions(
+            NVCF(
+                base_url="http://localhost:5000/custom/path/", auth_token=auth_token, _strict_response_validation=True
+            ),
+            NVCF(
                 base_url="http://localhost:5000/custom/path/",
+                auth_token=auth_token,
                 _strict_response_validation=True,
                 http_client=httpx.Client(),
             ),
         ],
         ids=["standard", "custom http client"],
     )
-    def test_absolute_request_url(self, client: NvidiaCloudFunctions) -> None:
+    def test_absolute_request_url(self, client: NVCF) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -590,7 +627,7 @@ class TestNvidiaCloudFunctions:
         assert request.url == "https://myapi.com/foo"
 
     def test_copied_client_does_not_close_http(self) -> None:
-        client = NvidiaCloudFunctions(base_url=base_url, _strict_response_validation=True)
+        client = NVCF(base_url=base_url, auth_token=auth_token, _strict_response_validation=True)
         assert not client.is_closed()
 
         copied = client.copy()
@@ -601,7 +638,7 @@ class TestNvidiaCloudFunctions:
         assert not client.is_closed()
 
     def test_client_context_manager(self) -> None:
-        client = NvidiaCloudFunctions(base_url=base_url, _strict_response_validation=True)
+        client = NVCF(base_url=base_url, auth_token=auth_token, _strict_response_validation=True)
         with client as c2:
             assert c2 is client
             assert not c2.is_closed()
@@ -622,7 +659,9 @@ class TestNvidiaCloudFunctions:
 
     def test_client_max_retries_validation(self) -> None:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
-            NvidiaCloudFunctions(base_url=base_url, _strict_response_validation=True, max_retries=cast(Any, None))
+            NVCF(
+                base_url=base_url, auth_token=auth_token, _strict_response_validation=True, max_retries=cast(Any, None)
+            )
 
     @pytest.mark.respx(base_url=base_url)
     def test_received_text_for_expected_json(self, respx_mock: MockRouter) -> None:
@@ -631,12 +670,12 @@ class TestNvidiaCloudFunctions:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = NvidiaCloudFunctions(base_url=base_url, _strict_response_validation=True)
+        strict_client = NVCF(base_url=base_url, auth_token=auth_token, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             strict_client.get("/foo", cast_to=Model)
 
-        client = NvidiaCloudFunctions(base_url=base_url, _strict_response_validation=False)
+        client = NVCF(base_url=base_url, auth_token=auth_token, _strict_response_validation=False)
 
         response = client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -663,14 +702,14 @@ class TestNvidiaCloudFunctions:
     )
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
     def test_parse_retry_after_header(self, remaining_retries: int, retry_after: str, timeout: float) -> None:
-        client = NvidiaCloudFunctions(base_url=base_url, _strict_response_validation=True)
+        client = NVCF(base_url=base_url, auth_token=auth_token, _strict_response_validation=True)
 
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("nvidia_cloud_functions._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("nvcf._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/v2/nvcf/functions").mock(side_effect=httpx.TimeoutException("Test timeout error"))
@@ -685,7 +724,7 @@ class TestNvidiaCloudFunctions:
 
         assert _get_open_connections(self.client) == 0
 
-    @mock.patch("nvidia_cloud_functions._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("nvcf._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/v2/nvcf/functions").mock(return_value=httpx.Response(500))
@@ -701,11 +740,9 @@ class TestNvidiaCloudFunctions:
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("nvidia_cloud_functions._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("nvcf._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
-    def test_retries_taken(
-        self, client: NvidiaCloudFunctions, failures_before_success: int, respx_mock: MockRouter
-    ) -> None:
+    def test_retries_taken(self, client: NVCF, failures_before_success: int, respx_mock: MockRouter) -> None:
         client = client.with_options(max_retries=4)
 
         nb_retries = 0
@@ -724,8 +761,8 @@ class TestNvidiaCloudFunctions:
         assert response.retries_taken == failures_before_success
 
 
-class TestAsyncNvidiaCloudFunctions:
-    client = AsyncNvidiaCloudFunctions(base_url=base_url, _strict_response_validation=True)
+class TestAsyncNVCF:
+    client = AsyncNVCF(base_url=base_url, auth_token=auth_token, _strict_response_validation=True)
 
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
@@ -753,6 +790,10 @@ class TestAsyncNvidiaCloudFunctions:
         copied = self.client.copy()
         assert id(copied) != id(self.client)
 
+        copied = self.client.copy(auth_token="another My Auth Token")
+        assert copied.auth_token == "another My Auth Token"
+        assert self.client.auth_token == "My Auth Token"
+
     def test_copy_default_options(self) -> None:
         # options that have a default are overridden correctly
         copied = self.client.copy(max_retries=7)
@@ -770,8 +811,8 @@ class TestAsyncNvidiaCloudFunctions:
         assert isinstance(self.client.timeout, httpx.Timeout)
 
     def test_copy_default_headers(self) -> None:
-        client = AsyncNvidiaCloudFunctions(
-            base_url=base_url, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
+        client = AsyncNVCF(
+            base_url=base_url, auth_token=auth_token, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         assert client.default_headers["X-Foo"] == "bar"
 
@@ -804,8 +845,8 @@ class TestAsyncNvidiaCloudFunctions:
             client.copy(set_default_headers={}, default_headers={"X-Foo": "Bar"})
 
     def test_copy_default_query(self) -> None:
-        client = AsyncNvidiaCloudFunctions(
-            base_url=base_url, _strict_response_validation=True, default_query={"foo": "bar"}
+        client = AsyncNVCF(
+            base_url=base_url, auth_token=auth_token, _strict_response_validation=True, default_query={"foo": "bar"}
         )
         assert _get_params(client)["foo"] == "bar"
 
@@ -895,10 +936,10 @@ class TestAsyncNvidiaCloudFunctions:
                         # to_raw_response_wrapper leaks through the @functools.wraps() decorator.
                         #
                         # removing the decorator fixes the leak for reasons we don't understand.
-                        "nvidia_cloud_functions/_legacy_response.py",
-                        "nvidia_cloud_functions/_response.py",
+                        "nvcf/_legacy_response.py",
+                        "nvcf/_response.py",
                         # pydantic.BaseModel.model_dump || pydantic.BaseModel.dict leak memory for some reason.
-                        "nvidia_cloud_functions/_compat.py",
+                        "nvcf/_compat.py",
                         # Standard library leaks we don't care about.
                         "/logging/__init__.py",
                     ]
@@ -929,8 +970,8 @@ class TestAsyncNvidiaCloudFunctions:
         assert timeout == httpx.Timeout(100.0)
 
     async def test_client_timeout_option(self) -> None:
-        client = AsyncNvidiaCloudFunctions(
-            base_url=base_url, _strict_response_validation=True, timeout=httpx.Timeout(0)
+        client = AsyncNVCF(
+            base_url=base_url, auth_token=auth_token, _strict_response_validation=True, timeout=httpx.Timeout(0)
         )
 
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -940,8 +981,8 @@ class TestAsyncNvidiaCloudFunctions:
     async def test_http_client_timeout_option(self) -> None:
         # custom timeout given to the httpx client should be used
         async with httpx.AsyncClient(timeout=None) as http_client:
-            client = AsyncNvidiaCloudFunctions(
-                base_url=base_url, _strict_response_validation=True, http_client=http_client
+            client = AsyncNVCF(
+                base_url=base_url, auth_token=auth_token, _strict_response_validation=True, http_client=http_client
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -950,8 +991,8 @@ class TestAsyncNvidiaCloudFunctions:
 
         # no timeout given to the httpx client should not use the httpx default
         async with httpx.AsyncClient() as http_client:
-            client = AsyncNvidiaCloudFunctions(
-                base_url=base_url, _strict_response_validation=True, http_client=http_client
+            client = AsyncNVCF(
+                base_url=base_url, auth_token=auth_token, _strict_response_validation=True, http_client=http_client
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -960,8 +1001,8 @@ class TestAsyncNvidiaCloudFunctions:
 
         # explicitly passing the default timeout currently results in it being ignored
         async with httpx.AsyncClient(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
-            client = AsyncNvidiaCloudFunctions(
-                base_url=base_url, _strict_response_validation=True, http_client=http_client
+            client = AsyncNVCF(
+                base_url=base_url, auth_token=auth_token, _strict_response_validation=True, http_client=http_client
             )
 
             request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -971,20 +1012,24 @@ class TestAsyncNvidiaCloudFunctions:
     def test_invalid_http_client(self) -> None:
         with pytest.raises(TypeError, match="Invalid `http_client` arg"):
             with httpx.Client() as http_client:
-                AsyncNvidiaCloudFunctions(
-                    base_url=base_url, _strict_response_validation=True, http_client=cast(Any, http_client)
+                AsyncNVCF(
+                    base_url=base_url,
+                    auth_token=auth_token,
+                    _strict_response_validation=True,
+                    http_client=cast(Any, http_client),
                 )
 
     def test_default_headers_option(self) -> None:
-        client = AsyncNvidiaCloudFunctions(
-            base_url=base_url, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
+        client = AsyncNVCF(
+            base_url=base_url, auth_token=auth_token, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "bar"
         assert request.headers.get("x-stainless-lang") == "python"
 
-        client2 = AsyncNvidiaCloudFunctions(
+        client2 = AsyncNVCF(
             base_url=base_url,
+            auth_token=auth_token,
             _strict_response_validation=True,
             default_headers={
                 "X-Foo": "stainless",
@@ -995,9 +1040,22 @@ class TestAsyncNvidiaCloudFunctions:
         assert request.headers.get("x-foo") == "stainless"
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
 
+    def test_validate_headers(self) -> None:
+        client = AsyncNVCF(base_url=base_url, auth_token=auth_token, _strict_response_validation=True)
+        request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
+        assert request.headers.get("Authorization") == f"Bearer {auth_token}"
+
+        with pytest.raises(NVCFError):
+            with update_env(**{"NVCF_AUTH_TOKEN": Omit()}):
+                client2 = AsyncNVCF(base_url=base_url, auth_token=None, _strict_response_validation=True)
+            _ = client2
+
     def test_default_query_option(self) -> None:
-        client = AsyncNvidiaCloudFunctions(
-            base_url=base_url, _strict_response_validation=True, default_query={"query_param": "bar"}
+        client = AsyncNVCF(
+            base_url=base_url,
+            auth_token=auth_token,
+            _strict_response_validation=True,
+            default_query={"query_param": "bar"},
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         url = httpx.URL(request.url)
@@ -1110,7 +1168,7 @@ class TestAsyncNvidiaCloudFunctions:
         params = dict(request.url.params)
         assert params == {"foo": "2"}
 
-    def test_multipart_repeating_array(self, async_client: AsyncNvidiaCloudFunctions) -> None:
+    def test_multipart_repeating_array(self, async_client: AsyncNVCF) -> None:
         request = async_client._build_request(
             FinalRequestOptions.construct(
                 method="get",
@@ -1197,7 +1255,9 @@ class TestAsyncNvidiaCloudFunctions:
         assert response.foo == 2
 
     def test_base_url_setter(self) -> None:
-        client = AsyncNvidiaCloudFunctions(base_url="https://example.com/from_init", _strict_response_validation=True)
+        client = AsyncNVCF(
+            base_url="https://example.com/from_init", auth_token=auth_token, _strict_response_validation=True
+        )
         assert client.base_url == "https://example.com/from_init/"
 
         client.base_url = "https://example.com/from_setter"  # type: ignore[assignment]
@@ -1205,23 +1265,26 @@ class TestAsyncNvidiaCloudFunctions:
         assert client.base_url == "https://example.com/from_setter/"
 
     def test_base_url_env(self) -> None:
-        with update_env(NVIDIA_CLOUD_FUNCTIONS_BASE_URL="http://localhost:5000/from/env"):
-            client = AsyncNvidiaCloudFunctions(_strict_response_validation=True)
+        with update_env(NVCF_BASE_URL="http://localhost:5000/from/env"):
+            client = AsyncNVCF(auth_token=auth_token, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncNvidiaCloudFunctions(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
-            AsyncNvidiaCloudFunctions(
+            AsyncNVCF(
+                base_url="http://localhost:5000/custom/path/", auth_token=auth_token, _strict_response_validation=True
+            ),
+            AsyncNVCF(
                 base_url="http://localhost:5000/custom/path/",
+                auth_token=auth_token,
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
             ),
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_trailing_slash(self, client: AsyncNvidiaCloudFunctions) -> None:
+    def test_base_url_trailing_slash(self, client: AsyncNVCF) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1234,16 +1297,19 @@ class TestAsyncNvidiaCloudFunctions:
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncNvidiaCloudFunctions(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
-            AsyncNvidiaCloudFunctions(
+            AsyncNVCF(
+                base_url="http://localhost:5000/custom/path/", auth_token=auth_token, _strict_response_validation=True
+            ),
+            AsyncNVCF(
                 base_url="http://localhost:5000/custom/path/",
+                auth_token=auth_token,
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
             ),
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_no_trailing_slash(self, client: AsyncNvidiaCloudFunctions) -> None:
+    def test_base_url_no_trailing_slash(self, client: AsyncNVCF) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1256,16 +1322,19 @@ class TestAsyncNvidiaCloudFunctions:
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncNvidiaCloudFunctions(base_url="http://localhost:5000/custom/path/", _strict_response_validation=True),
-            AsyncNvidiaCloudFunctions(
+            AsyncNVCF(
+                base_url="http://localhost:5000/custom/path/", auth_token=auth_token, _strict_response_validation=True
+            ),
+            AsyncNVCF(
                 base_url="http://localhost:5000/custom/path/",
+                auth_token=auth_token,
                 _strict_response_validation=True,
                 http_client=httpx.AsyncClient(),
             ),
         ],
         ids=["standard", "custom http client"],
     )
-    def test_absolute_request_url(self, client: AsyncNvidiaCloudFunctions) -> None:
+    def test_absolute_request_url(self, client: AsyncNVCF) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1276,7 +1345,7 @@ class TestAsyncNvidiaCloudFunctions:
         assert request.url == "https://myapi.com/foo"
 
     async def test_copied_client_does_not_close_http(self) -> None:
-        client = AsyncNvidiaCloudFunctions(base_url=base_url, _strict_response_validation=True)
+        client = AsyncNVCF(base_url=base_url, auth_token=auth_token, _strict_response_validation=True)
         assert not client.is_closed()
 
         copied = client.copy()
@@ -1288,7 +1357,7 @@ class TestAsyncNvidiaCloudFunctions:
         assert not client.is_closed()
 
     async def test_client_context_manager(self) -> None:
-        client = AsyncNvidiaCloudFunctions(base_url=base_url, _strict_response_validation=True)
+        client = AsyncNVCF(base_url=base_url, auth_token=auth_token, _strict_response_validation=True)
         async with client as c2:
             assert c2 is client
             assert not c2.is_closed()
@@ -1310,7 +1379,9 @@ class TestAsyncNvidiaCloudFunctions:
 
     async def test_client_max_retries_validation(self) -> None:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
-            AsyncNvidiaCloudFunctions(base_url=base_url, _strict_response_validation=True, max_retries=cast(Any, None))
+            AsyncNVCF(
+                base_url=base_url, auth_token=auth_token, _strict_response_validation=True, max_retries=cast(Any, None)
+            )
 
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
@@ -1320,12 +1391,12 @@ class TestAsyncNvidiaCloudFunctions:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = AsyncNvidiaCloudFunctions(base_url=base_url, _strict_response_validation=True)
+        strict_client = AsyncNVCF(base_url=base_url, auth_token=auth_token, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             await strict_client.get("/foo", cast_to=Model)
 
-        client = AsyncNvidiaCloudFunctions(base_url=base_url, _strict_response_validation=False)
+        client = AsyncNVCF(base_url=base_url, auth_token=auth_token, _strict_response_validation=False)
 
         response = await client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -1353,14 +1424,14 @@ class TestAsyncNvidiaCloudFunctions:
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
     @pytest.mark.asyncio
     async def test_parse_retry_after_header(self, remaining_retries: int, retry_after: str, timeout: float) -> None:
-        client = AsyncNvidiaCloudFunctions(base_url=base_url, _strict_response_validation=True)
+        client = AsyncNVCF(base_url=base_url, auth_token=auth_token, _strict_response_validation=True)
 
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("nvidia_cloud_functions._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("nvcf._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/v2/nvcf/functions").mock(side_effect=httpx.TimeoutException("Test timeout error"))
@@ -1375,7 +1446,7 @@ class TestAsyncNvidiaCloudFunctions:
 
         assert _get_open_connections(self.client) == 0
 
-    @mock.patch("nvidia_cloud_functions._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("nvcf._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/v2/nvcf/functions").mock(return_value=httpx.Response(500))
@@ -1391,11 +1462,11 @@ class TestAsyncNvidiaCloudFunctions:
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("nvidia_cloud_functions._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("nvcf._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_retries_taken(
-        self, async_client: AsyncNvidiaCloudFunctions, failures_before_success: int, respx_mock: MockRouter
+        self, async_client: AsyncNVCF, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = async_client.with_options(max_retries=4)
 

@@ -1,8 +1,8 @@
-# Nvidia Cloud Functions Python API library
+# NVCF Python API library
 
-[![PyPI version](https://img.shields.io/pypi/v/nvidia_cloud_functions.svg)](https://pypi.org/project/nvidia_cloud_functions/)
+[![PyPI version](https://img.shields.io/pypi/v/nvcf.svg)](https://pypi.org/project/nvcf/)
 
-The Nvidia Cloud Functions Python library provides convenient access to the Nvidia Cloud Functions REST API from any Python 3.7+
+The NVCF Python library provides convenient access to the NVCF REST API from any Python 3.7+
 application. The library includes type definitions for all request params and response fields,
 and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
 
@@ -20,16 +20,20 @@ pip install git+ssh://git@github.com/stainless-sdks/nvidia-cloud-functions-pytho
 ```
 
 > [!NOTE]
-> Once this package is [published to PyPI](https://app.stainlessapi.com/docs/guides/publish), this will become: `pip install --pre nvidia_cloud_functions`
+> Once this package is [published to PyPI](https://app.stainlessapi.com/docs/guides/publish), this will become: `pip install --pre nvcf`
 
 ## Usage
 
 The full API of this library can be found in [api.md](api.md).
 
 ```python
-from nvidia_cloud_functions import NvidiaCloudFunctions
+import os
+from nvcf import NVCF
 
-client = NvidiaCloudFunctions()
+client = NVCF(
+    # This is the default and can be omitted
+    auth_token=os.environ.get("NVCF_AUTH_TOKEN"),
+)
 
 create_function_response = client.nvcf.functions.create(
     inference_url="https://example.com",
@@ -38,15 +42,24 @@ create_function_response = client.nvcf.functions.create(
 print(create_function_response.function)
 ```
 
+While you can provide a `auth_token` keyword argument,
+we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
+to add `NVCF_AUTH_TOKEN="My Auth Token"` to your `.env` file
+so that your Auth Token is not stored in source control.
+
 ## Async usage
 
-Simply import `AsyncNvidiaCloudFunctions` instead of `NvidiaCloudFunctions` and use `await` with each API call:
+Simply import `AsyncNVCF` instead of `NVCF` and use `await` with each API call:
 
 ```python
+import os
 import asyncio
-from nvidia_cloud_functions import AsyncNvidiaCloudFunctions
+from nvcf import AsyncNVCF
 
-client = AsyncNvidiaCloudFunctions()
+client = AsyncNVCF(
+    # This is the default and can be omitted
+    auth_token=os.environ.get("NVCF_AUTH_TOKEN"),
+)
 
 
 async def main() -> None:
@@ -73,30 +86,30 @@ Typed requests and responses provide autocomplete and documentation within your 
 
 ## Handling errors
 
-When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `nvidia_cloud_functions.APIConnectionError` is raised.
+When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `nvcf.APIConnectionError` is raised.
 
 When the API returns a non-success status code (that is, 4xx or 5xx
-response), a subclass of `nvidia_cloud_functions.APIStatusError` is raised, containing `status_code` and `response` properties.
+response), a subclass of `nvcf.APIStatusError` is raised, containing `status_code` and `response` properties.
 
-All errors inherit from `nvidia_cloud_functions.APIError`.
+All errors inherit from `nvcf.APIError`.
 
 ```python
-import nvidia_cloud_functions
-from nvidia_cloud_functions import NvidiaCloudFunctions
+import nvcf
+from nvcf import NVCF
 
-client = NvidiaCloudFunctions()
+client = NVCF()
 
 try:
     client.nvcf.functions.create(
         inference_url="https://example.com",
         name="x",
     )
-except nvidia_cloud_functions.APIConnectionError as e:
+except nvcf.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
-except nvidia_cloud_functions.RateLimitError as e:
+except nvcf.RateLimitError as e:
     print("A 429 status code was received; we should back off a bit.")
-except nvidia_cloud_functions.APIStatusError as e:
+except nvcf.APIStatusError as e:
     print("Another non-200-range status code was received")
     print(e.status_code)
     print(e.response)
@@ -124,10 +137,10 @@ Connection errors (for example, due to a network connectivity problem), 408 Requ
 You can use the `max_retries` option to configure or disable retry settings:
 
 ```python
-from nvidia_cloud_functions import NvidiaCloudFunctions
+from nvcf import NVCF
 
 # Configure the default for all requests:
-client = NvidiaCloudFunctions(
+client = NVCF(
     # default is 2
     max_retries=0,
 )
@@ -145,16 +158,16 @@ By default requests time out after 1 minute. You can configure this with a `time
 which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/#fine-tuning-the-configuration) object:
 
 ```python
-from nvidia_cloud_functions import NvidiaCloudFunctions
+from nvcf import NVCF
 
 # Configure the default for all requests:
-client = NvidiaCloudFunctions(
+client = NVCF(
     # 20 seconds (default is 1 minute)
     timeout=20.0,
 )
 
 # More granular control:
-client = NvidiaCloudFunctions(
+client = NVCF(
     timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
 )
 
@@ -175,10 +188,10 @@ Note that requests that time out are [retried twice by default](#retries).
 
 We use the standard library [`logging`](https://docs.python.org/3/library/logging.html) module.
 
-You can enable logging by setting the environment variable `NVIDIA_CLOUD_FUNCTIONS_LOG` to `debug`.
+You can enable logging by setting the environment variable `NVCF_LOG` to `debug`.
 
 ```shell
-$ export NVIDIA_CLOUD_FUNCTIONS_LOG=debug
+$ export NVCF_LOG=debug
 ```
 
 ### How to tell whether `None` means `null` or missing
@@ -198,9 +211,9 @@ if response.my_field is None:
 The "raw" Response object can be accessed by prefixing `.with_raw_response.` to any HTTP method call, e.g.,
 
 ```py
-from nvidia_cloud_functions import NvidiaCloudFunctions
+from nvcf import NVCF
 
-client = NvidiaCloudFunctions()
+client = NVCF()
 response = client.nvcf.functions.with_raw_response.create(
     inference_url="https://example.com",
     name="x",
@@ -211,9 +224,9 @@ function = response.parse()  # get the object that `nvcf.functions.create()` wou
 print(function.function)
 ```
 
-These methods return an [`APIResponse`](https://github.com/stainless-sdks/nvidia-cloud-functions-python/tree/main/src/nvidia_cloud_functions/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/stainless-sdks/nvidia-cloud-functions-python/tree/main/src/nvcf/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/nvidia-cloud-functions-python/tree/main/src/nvidia_cloud_functions/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/nvidia-cloud-functions-python/tree/main/src/nvcf/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -278,10 +291,10 @@ You can directly override the [httpx client](https://www.python-httpx.org/api/#c
 - Additional [advanced](https://www.python-httpx.org/advanced/clients/) functionality
 
 ```python
-from nvidia_cloud_functions import NvidiaCloudFunctions, DefaultHttpxClient
+from nvcf import NVCF, DefaultHttpxClient
 
-client = NvidiaCloudFunctions(
-    # Or use the `NVIDIA_CLOUD_FUNCTIONS_BASE_URL` env var
+client = NVCF(
+    # Or use the `NVCF_BASE_URL` env var
     base_url="http://my.test.server.example.com:8083",
     http_client=DefaultHttpxClient(
         proxies="http://my.test.proxy.example.com",

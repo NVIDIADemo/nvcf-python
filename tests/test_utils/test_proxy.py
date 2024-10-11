@@ -2,7 +2,7 @@ import operator
 from typing import Any
 from typing_extensions import override
 
-from nvidia_cloud_functions._utils import LazyProxy
+from nvcf._utils import LazyProxy
 
 
 class RecursiveLazyProxy(LazyProxy[Any]):

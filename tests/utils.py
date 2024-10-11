@@ -8,8 +8,8 @@ from typing import Any, TypeVar, Iterator, cast
 from datetime import date, datetime
 from typing_extensions import Literal, get_args, get_origin, assert_type
 
-from nvidia_cloud_functions._types import Omit, NoneType
-from nvidia_cloud_functions._utils import (
+from nvcf._types import Omit, NoneType
+from nvcf._utils import (
     is_dict,
     is_list,
     is_list_type,
@@ -17,8 +17,8 @@ from nvidia_cloud_functions._utils import (
     extract_type_arg,
     is_annotated_type,
 )
-from nvidia_cloud_functions._compat import PYDANTIC_V2, field_outer_type, get_model_fields
-from nvidia_cloud_functions._models import BaseModel
+from nvcf._compat import PYDANTIC_V2, field_outer_type, get_model_fields
+from nvcf._models import BaseModel
 
 BaseModelT = TypeVar("BaseModelT", bound=BaseModel)
 

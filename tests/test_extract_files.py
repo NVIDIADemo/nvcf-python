@@ -4,8 +4,8 @@ from typing import Sequence
 
 import pytest
 
-from nvidia_cloud_functions._types import FileTypes
-from nvidia_cloud_functions._utils import extract_files
+from nvcf._types import FileTypes
+from nvcf._utils import extract_files
 
 
 def test_removes_files_from_input() -> None:

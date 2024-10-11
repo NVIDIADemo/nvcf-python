@@ -8,15 +8,15 @@ from typing_extensions import Required, Annotated, TypedDict
 
 import pytest
 
-from nvidia_cloud_functions._types import Base64FileInput
-from nvidia_cloud_functions._utils import (
+from nvcf._types import Base64FileInput
+from nvcf._utils import (
     PropertyInfo,
     transform as _transform,
     parse_datetime,
     async_transform as _async_transform,
 )
-from nvidia_cloud_functions._compat import PYDANTIC_V2
-from nvidia_cloud_functions._models import BaseModel
+from nvcf._compat import PYDANTIC_V2
+from nvcf._models import BaseModel
 
 _T = TypeVar("_T")
 
