@@ -23,10 +23,21 @@ class ExecResource(SyncAPIResource):
 
     @cached_property
     def with_raw_response(self) -> ExecResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return ExecResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> ExecResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return ExecResourceWithStreamingResponse(self)
 
 
@@ -37,10 +48,21 @@ class AsyncExecResource(AsyncAPIResource):
 
     @cached_property
     def with_raw_response(self) -> AsyncExecResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return AsyncExecResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> AsyncExecResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return AsyncExecResourceWithStreamingResponse(self)
 
 

@@ -22,10 +22,21 @@ __all__ = ["PositionResource", "AsyncPositionResource"]
 class PositionResource(SyncAPIResource):
     @cached_property
     def with_raw_response(self) -> PositionResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return PositionResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> PositionResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return PositionResourceWithStreamingResponse(self)
 
     def retrieve(
@@ -67,10 +78,21 @@ class PositionResource(SyncAPIResource):
 class AsyncPositionResource(AsyncAPIResource):
     @cached_property
     def with_raw_response(self) -> AsyncPositionResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return AsyncPositionResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> AsyncPositionResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return AsyncPositionResourceWithStreamingResponse(self)
 
     async def retrieve(
