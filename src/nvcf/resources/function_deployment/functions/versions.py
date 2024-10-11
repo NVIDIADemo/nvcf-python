@@ -20,7 +20,7 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.shared.function_response import FunctionResponse
+from ....types.shared.function import Function
 from ....types.function_deployment.functions import version_create_params, version_delete_params, version_update_params
 from ....types.function_deployment.functions.deployment_response import DeploymentResponse
 
@@ -186,7 +186,7 @@ class VersionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionResponse:
+    ) -> Function:
         """Deletes the deployment associated with the specified function.
 
         Upon deletion,
@@ -223,7 +223,7 @@ class VersionsResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform({"graceful": graceful}, version_delete_params.VersionDeleteParams),
             ),
-            cast_to=FunctionResponse,
+            cast_to=Function,
         )
 
 
@@ -386,7 +386,7 @@ class AsyncVersionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionResponse:
+    ) -> Function:
         """Deletes the deployment associated with the specified function.
 
         Upon deletion,
@@ -423,7 +423,7 @@ class AsyncVersionsResource(AsyncAPIResource):
                 timeout=timeout,
                 query=await async_maybe_transform({"graceful": graceful}, version_delete_params.VersionDeleteParams),
             ),
-            cast_to=FunctionResponse,
+            cast_to=Function,
         )
 
 

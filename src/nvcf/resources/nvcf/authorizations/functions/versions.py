@@ -20,8 +20,9 @@ from ....._response import (
     async_to_streamed_response_wrapper,
 )
 from ....._base_client import make_request_options
+from .....types.shared.authorized_parties import AuthorizedParties
 from .....types.nvcf.authorizations.functions import version_authorize_params
-from .....types.shared.authorized_parties_response import AuthorizedPartiesResponse
+from .....types.shared_params.authorized_party_dto import AuthorizedPartyDTO
 
 __all__ = ["VersionsResource", "AsyncVersionsResource"]
 
@@ -46,7 +47,7 @@ class VersionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AuthorizedPartiesResponse:
+    ) -> AuthorizedParties:
         """
         Gets NVIDIA Cloud Account IDs that are authorized to invoke specified function
         version. Response includes authorized accounts that were added specifically to
@@ -74,7 +75,7 @@ class VersionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=AuthorizedPartiesResponse,
+            cast_to=AuthorizedParties,
         )
 
     def delete(
@@ -88,7 +89,7 @@ class VersionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AuthorizedPartiesResponse:
+    ) -> AuthorizedParties:
         """
         Deletes all the authorized accounts that are directly associated with the
         specified function version. Authorized parties that are inherited by the
@@ -117,7 +118,7 @@ class VersionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=AuthorizedPartiesResponse,
+            cast_to=AuthorizedParties,
         )
 
     def authorize(
@@ -125,14 +126,14 @@ class VersionsResource(SyncAPIResource):
         function_version_id: str,
         *,
         function_id: str,
-        authorized_parties: Iterable[version_authorize_params.AuthorizedParty],
+        authorized_parties: Iterable[AuthorizedPartyDTO],
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AuthorizedPartiesResponse:
+    ) -> AuthorizedParties:
         """
         Authorizes additional NVIDIA Cloud Accounts to invoke a specific function
         version. By default, a function belongs to the NVIDIA Cloud Account that created
@@ -167,7 +168,7 @@ class VersionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=AuthorizedPartiesResponse,
+            cast_to=AuthorizedParties,
         )
 
 
@@ -191,7 +192,7 @@ class AsyncVersionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AuthorizedPartiesResponse:
+    ) -> AuthorizedParties:
         """
         Gets NVIDIA Cloud Account IDs that are authorized to invoke specified function
         version. Response includes authorized accounts that were added specifically to
@@ -219,7 +220,7 @@ class AsyncVersionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=AuthorizedPartiesResponse,
+            cast_to=AuthorizedParties,
         )
 
     async def delete(
@@ -233,7 +234,7 @@ class AsyncVersionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AuthorizedPartiesResponse:
+    ) -> AuthorizedParties:
         """
         Deletes all the authorized accounts that are directly associated with the
         specified function version. Authorized parties that are inherited by the
@@ -262,7 +263,7 @@ class AsyncVersionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=AuthorizedPartiesResponse,
+            cast_to=AuthorizedParties,
         )
 
     async def authorize(
@@ -270,14 +271,14 @@ class AsyncVersionsResource(AsyncAPIResource):
         function_version_id: str,
         *,
         function_id: str,
-        authorized_parties: Iterable[version_authorize_params.AuthorizedParty],
+        authorized_parties: Iterable[AuthorizedPartyDTO],
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AuthorizedPartiesResponse:
+    ) -> AuthorizedParties:
         """
         Authorizes additional NVIDIA Cloud Accounts to invoke a specific function
         version. By default, a function belongs to the NVIDIA Cloud Account that created
@@ -312,7 +313,7 @@ class AsyncVersionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=AuthorizedPartiesResponse,
+            cast_to=AuthorizedParties,
         )
 
 
