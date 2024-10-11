@@ -20,7 +20,7 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.shared.function_response import FunctionResponse
+from ....types.shared.function import Function
 from ....types.function_deployment.functions import version_create_params, version_delete_params, version_update_params
 from ....types.function_deployment.functions.deployment_response import DeploymentResponse
 
@@ -30,10 +30,21 @@ __all__ = ["VersionsResource", "AsyncVersionsResource"]
 class VersionsResource(SyncAPIResource):
     @cached_property
     def with_raw_response(self) -> VersionsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return VersionsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> VersionsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return VersionsResourceWithStreamingResponse(self)
 
     def create(
@@ -186,7 +197,7 @@ class VersionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionResponse:
+    ) -> Function:
         """Deletes the deployment associated with the specified function.
 
         Upon deletion,
@@ -223,17 +234,28 @@ class VersionsResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform({"graceful": graceful}, version_delete_params.VersionDeleteParams),
             ),
-            cast_to=FunctionResponse,
+            cast_to=Function,
         )
 
 
 class AsyncVersionsResource(AsyncAPIResource):
     @cached_property
     def with_raw_response(self) -> AsyncVersionsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return AsyncVersionsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> AsyncVersionsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return AsyncVersionsResourceWithStreamingResponse(self)
 
     async def create(
@@ -386,7 +408,7 @@ class AsyncVersionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionResponse:
+    ) -> Function:
         """Deletes the deployment associated with the specified function.
 
         Upon deletion,
@@ -423,7 +445,7 @@ class AsyncVersionsResource(AsyncAPIResource):
                 timeout=timeout,
                 query=await async_maybe_transform({"graceful": graceful}, version_delete_params.VersionDeleteParams),
             ),
-            cast_to=FunctionResponse,
+            cast_to=Function,
         )
 
 

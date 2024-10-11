@@ -24,10 +24,21 @@ class UserSecretManagementResource(SyncAPIResource):
 
     @cached_property
     def with_raw_response(self) -> UserSecretManagementResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return UserSecretManagementResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> UserSecretManagementResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return UserSecretManagementResourceWithStreamingResponse(self)
 
 
@@ -38,10 +49,21 @@ class AsyncUserSecretManagementResource(AsyncAPIResource):
 
     @cached_property
     def with_raw_response(self) -> AsyncUserSecretManagementResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return AsyncUserSecretManagementResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> AsyncUserSecretManagementResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return AsyncUserSecretManagementResourceWithStreamingResponse(self)
 
 

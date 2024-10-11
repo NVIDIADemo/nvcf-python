@@ -52,13 +52,13 @@ class TestAssets:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
-    def test_method_list(self, client: NVCF) -> None:
-        asset = client.assets.list()
+    def test_method_retrieve_all(self, client: NVCF) -> None:
+        asset = client.assets.retrieve_all()
         assert_matches_type(ListAssetsResponse, asset, path=["response"])
 
     @parametrize
-    def test_raw_response_list(self, client: NVCF) -> None:
-        response = client.assets.with_raw_response.list()
+    def test_raw_response_retrieve_all(self, client: NVCF) -> None:
+        response = client.assets.with_raw_response.retrieve_all()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -66,8 +66,8 @@ class TestAssets:
         assert_matches_type(ListAssetsResponse, asset, path=["response"])
 
     @parametrize
-    def test_streaming_response_list(self, client: NVCF) -> None:
-        with client.assets.with_streaming_response.list() as response:
+    def test_streaming_response_retrieve_all(self, client: NVCF) -> None:
+        with client.assets.with_streaming_response.retrieve_all() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
@@ -115,13 +115,13 @@ class TestAsyncAssets:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
-    async def test_method_list(self, async_client: AsyncNVCF) -> None:
-        asset = await async_client.assets.list()
+    async def test_method_retrieve_all(self, async_client: AsyncNVCF) -> None:
+        asset = await async_client.assets.retrieve_all()
         assert_matches_type(ListAssetsResponse, asset, path=["response"])
 
     @parametrize
-    async def test_raw_response_list(self, async_client: AsyncNVCF) -> None:
-        response = await async_client.assets.with_raw_response.list()
+    async def test_raw_response_retrieve_all(self, async_client: AsyncNVCF) -> None:
+        response = await async_client.assets.with_raw_response.retrieve_all()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -129,8 +129,8 @@ class TestAsyncAssets:
         assert_matches_type(ListAssetsResponse, asset, path=["response"])
 
     @parametrize
-    async def test_streaming_response_list(self, async_client: AsyncNVCF) -> None:
-        async with async_client.assets.with_streaming_response.list() as response:
+    async def test_streaming_response_retrieve_all(self, async_client: AsyncNVCF) -> None:
+        async with async_client.assets.with_streaming_response.retrieve_all() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 

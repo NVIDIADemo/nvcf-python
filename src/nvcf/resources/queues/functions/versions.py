@@ -14,7 +14,7 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.shared.get_queues_response import GetQueuesResponse
+from ....types.shared.queues_response import QueuesResponse
 
 __all__ = ["VersionsResource", "AsyncVersionsResource"]
 
@@ -22,13 +22,24 @@ __all__ = ["VersionsResource", "AsyncVersionsResource"]
 class VersionsResource(SyncAPIResource):
     @cached_property
     def with_raw_response(self) -> VersionsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return VersionsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> VersionsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return VersionsResourceWithStreamingResponse(self)
 
-    def list(
+    def retrieve_all(
         self,
         version_id: str,
         *,
@@ -39,7 +50,7 @@ class VersionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> GetQueuesResponse:
+    ) -> QueuesResponse:
         """Provides details of all the queues associated with the specified function.
 
         If a
@@ -66,20 +77,31 @@ class VersionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=GetQueuesResponse,
+            cast_to=QueuesResponse,
         )
 
 
 class AsyncVersionsResource(AsyncAPIResource):
     @cached_property
     def with_raw_response(self) -> AsyncVersionsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return AsyncVersionsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> AsyncVersionsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return AsyncVersionsResourceWithStreamingResponse(self)
 
-    async def list(
+    async def retrieve_all(
         self,
         version_id: str,
         *,
@@ -90,7 +112,7 @@ class AsyncVersionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> GetQueuesResponse:
+    ) -> QueuesResponse:
         """Provides details of all the queues associated with the specified function.
 
         If a
@@ -117,7 +139,7 @@ class AsyncVersionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=GetQueuesResponse,
+            cast_to=QueuesResponse,
         )
 
 
@@ -125,8 +147,8 @@ class VersionsResourceWithRawResponse:
     def __init__(self, versions: VersionsResource) -> None:
         self._versions = versions
 
-        self.list = to_raw_response_wrapper(
-            versions.list,
+        self.retrieve_all = to_raw_response_wrapper(
+            versions.retrieve_all,
         )
 
 
@@ -134,8 +156,8 @@ class AsyncVersionsResourceWithRawResponse:
     def __init__(self, versions: AsyncVersionsResource) -> None:
         self._versions = versions
 
-        self.list = async_to_raw_response_wrapper(
-            versions.list,
+        self.retrieve_all = async_to_raw_response_wrapper(
+            versions.retrieve_all,
         )
 
 
@@ -143,8 +165,8 @@ class VersionsResourceWithStreamingResponse:
     def __init__(self, versions: VersionsResource) -> None:
         self._versions = versions
 
-        self.list = to_streamed_response_wrapper(
-            versions.list,
+        self.retrieve_all = to_streamed_response_wrapper(
+            versions.retrieve_all,
         )
 
 
@@ -152,6 +174,6 @@ class AsyncVersionsResourceWithStreamingResponse:
     def __init__(self, versions: AsyncVersionsResource) -> None:
         self._versions = versions
 
-        self.list = async_to_streamed_response_wrapper(
-            versions.list,
+        self.retrieve_all = async_to_streamed_response_wrapper(
+            versions.retrieve_all,
         )

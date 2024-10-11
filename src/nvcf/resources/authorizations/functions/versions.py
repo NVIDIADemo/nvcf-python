@@ -19,7 +19,8 @@ from ...._response import (
 )
 from ...._base_client import make_request_options
 from ....types.authorizations.functions import version_add_params, version_remove_params
-from ....types.shared.authorized_parties_response import AuthorizedPartiesResponse
+from ....types.shared.authorized_parties import AuthorizedParties
+from ....types.shared_params.authorized_party_dto import AuthorizedPartyDTO
 
 __all__ = ["VersionsResource", "AsyncVersionsResource"]
 
@@ -27,10 +28,21 @@ __all__ = ["VersionsResource", "AsyncVersionsResource"]
 class VersionsResource(SyncAPIResource):
     @cached_property
     def with_raw_response(self) -> VersionsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return VersionsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> VersionsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return VersionsResourceWithStreamingResponse(self)
 
     def add(
@@ -38,14 +50,14 @@ class VersionsResource(SyncAPIResource):
         function_version_id: str,
         *,
         function_id: str,
-        authorized_party: version_add_params.AuthorizedParty,
+        authorized_party: AuthorizedPartyDTO,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AuthorizedPartiesResponse:
+    ) -> AuthorizedParties:
         """
         Adds the specified NVIDIA Cloud Account to the set of authorized accounts that
         can invoke the specified function version. If the specified function version
@@ -80,7 +92,7 @@ class VersionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=AuthorizedPartiesResponse,
+            cast_to=AuthorizedParties,
         )
 
     def remove(
@@ -88,14 +100,14 @@ class VersionsResource(SyncAPIResource):
         function_version_id: str,
         *,
         function_id: str,
-        authorized_party: version_remove_params.AuthorizedParty,
+        authorized_party: AuthorizedPartyDTO,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AuthorizedPartiesResponse:
+    ) -> AuthorizedParties:
         """
         Removes the specified NVIDIA Cloud Account from the set of authorized accounts
         that are directly associated with specified function version. If the specified
@@ -131,17 +143,28 @@ class VersionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=AuthorizedPartiesResponse,
+            cast_to=AuthorizedParties,
         )
 
 
 class AsyncVersionsResource(AsyncAPIResource):
     @cached_property
     def with_raw_response(self) -> AsyncVersionsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return AsyncVersionsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> AsyncVersionsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return AsyncVersionsResourceWithStreamingResponse(self)
 
     async def add(
@@ -149,14 +172,14 @@ class AsyncVersionsResource(AsyncAPIResource):
         function_version_id: str,
         *,
         function_id: str,
-        authorized_party: version_add_params.AuthorizedParty,
+        authorized_party: AuthorizedPartyDTO,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AuthorizedPartiesResponse:
+    ) -> AuthorizedParties:
         """
         Adds the specified NVIDIA Cloud Account to the set of authorized accounts that
         can invoke the specified function version. If the specified function version
@@ -193,7 +216,7 @@ class AsyncVersionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=AuthorizedPartiesResponse,
+            cast_to=AuthorizedParties,
         )
 
     async def remove(
@@ -201,14 +224,14 @@ class AsyncVersionsResource(AsyncAPIResource):
         function_version_id: str,
         *,
         function_id: str,
-        authorized_party: version_remove_params.AuthorizedParty,
+        authorized_party: AuthorizedPartyDTO,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> AuthorizedPartiesResponse:
+    ) -> AuthorizedParties:
         """
         Removes the specified NVIDIA Cloud Account from the set of authorized accounts
         that are directly associated with specified function version. If the specified
@@ -246,7 +269,7 @@ class AsyncVersionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=AuthorizedPartiesResponse,
+            cast_to=AuthorizedParties,
         )
 
 

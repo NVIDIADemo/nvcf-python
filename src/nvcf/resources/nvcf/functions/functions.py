@@ -28,9 +28,10 @@ from ...._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ....types.nvcf import function_list_params, function_create_params
+from ....types.nvcf import function_create_params, function_retrieve_all_params
 from ...._base_client import make_request_options
-from ....types.shared.list_functions_response import ListFunctionsResponse
+from ....types.shared_params.health_dto import HealthDTO
+from ....types.shared.functions_response import FunctionsResponse
 from ....types.shared.create_function_response import CreateFunctionResponse
 
 __all__ = ["FunctionsResource", "AsyncFunctionsResource"]
@@ -43,10 +44,21 @@ class FunctionsResource(SyncAPIResource):
 
     @cached_property
     def with_raw_response(self) -> FunctionsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return FunctionsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> FunctionsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return FunctionsResourceWithStreamingResponse(self)
 
     def create(
@@ -60,7 +72,7 @@ class FunctionsResource(SyncAPIResource):
         container_image: str | NotGiven = NOT_GIVEN,
         description: str | NotGiven = NOT_GIVEN,
         function_type: Literal["DEFAULT", "STREAMING"] | NotGiven = NOT_GIVEN,
-        health: function_create_params.Health | NotGiven = NOT_GIVEN,
+        health: HealthDTO | NotGiven = NOT_GIVEN,
         health_uri: str | NotGiven = NOT_GIVEN,
         helm_chart: str | NotGiven = NOT_GIVEN,
         helm_chart_service_name: str | NotGiven = NOT_GIVEN,
@@ -157,7 +169,7 @@ class FunctionsResource(SyncAPIResource):
             cast_to=CreateFunctionResponse,
         )
 
-    def list(
+    def retrieve_all(
         self,
         *,
         visibility: List[Literal["authorized", "private", "public"]] | NotGiven = NOT_GIVEN,
@@ -167,7 +179,7 @@ class FunctionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ListFunctionsResponse:
+    ) -> FunctionsResponse:
         """
         Lists all the functions associated with the authenticated NVIDIA Cloud Account.
         Requires either a bearer token or an api-key with 'list_functions' or
@@ -192,9 +204,11 @@ class FunctionsResource(SyncAPIResource):
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=maybe_transform({"visibility": visibility}, function_list_params.FunctionListParams),
+                query=maybe_transform(
+                    {"visibility": visibility}, function_retrieve_all_params.FunctionRetrieveAllParams
+                ),
             ),
-            cast_to=ListFunctionsResponse,
+            cast_to=FunctionsResponse,
         )
 
 
@@ -205,10 +219,21 @@ class AsyncFunctionsResource(AsyncAPIResource):
 
     @cached_property
     def with_raw_response(self) -> AsyncFunctionsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return AsyncFunctionsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> AsyncFunctionsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return AsyncFunctionsResourceWithStreamingResponse(self)
 
     async def create(
@@ -222,7 +247,7 @@ class AsyncFunctionsResource(AsyncAPIResource):
         container_image: str | NotGiven = NOT_GIVEN,
         description: str | NotGiven = NOT_GIVEN,
         function_type: Literal["DEFAULT", "STREAMING"] | NotGiven = NOT_GIVEN,
-        health: function_create_params.Health | NotGiven = NOT_GIVEN,
+        health: HealthDTO | NotGiven = NOT_GIVEN,
         health_uri: str | NotGiven = NOT_GIVEN,
         helm_chart: str | NotGiven = NOT_GIVEN,
         helm_chart_service_name: str | NotGiven = NOT_GIVEN,
@@ -319,7 +344,7 @@ class AsyncFunctionsResource(AsyncAPIResource):
             cast_to=CreateFunctionResponse,
         )
 
-    async def list(
+    async def retrieve_all(
         self,
         *,
         visibility: List[Literal["authorized", "private", "public"]] | NotGiven = NOT_GIVEN,
@@ -329,7 +354,7 @@ class AsyncFunctionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ListFunctionsResponse:
+    ) -> FunctionsResponse:
         """
         Lists all the functions associated with the authenticated NVIDIA Cloud Account.
         Requires either a bearer token or an api-key with 'list_functions' or
@@ -354,9 +379,11 @@ class AsyncFunctionsResource(AsyncAPIResource):
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform({"visibility": visibility}, function_list_params.FunctionListParams),
+                query=await async_maybe_transform(
+                    {"visibility": visibility}, function_retrieve_all_params.FunctionRetrieveAllParams
+                ),
             ),
-            cast_to=ListFunctionsResponse,
+            cast_to=FunctionsResponse,
         )
 
 
@@ -367,8 +394,8 @@ class FunctionsResourceWithRawResponse:
         self.create = to_raw_response_wrapper(
             functions.create,
         )
-        self.list = to_raw_response_wrapper(
-            functions.list,
+        self.retrieve_all = to_raw_response_wrapper(
+            functions.retrieve_all,
         )
 
     @cached_property
@@ -383,8 +410,8 @@ class AsyncFunctionsResourceWithRawResponse:
         self.create = async_to_raw_response_wrapper(
             functions.create,
         )
-        self.list = async_to_raw_response_wrapper(
-            functions.list,
+        self.retrieve_all = async_to_raw_response_wrapper(
+            functions.retrieve_all,
         )
 
     @cached_property
@@ -399,8 +426,8 @@ class FunctionsResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             functions.create,
         )
-        self.list = to_streamed_response_wrapper(
-            functions.list,
+        self.retrieve_all = to_streamed_response_wrapper(
+            functions.retrieve_all,
         )
 
     @cached_property
@@ -415,8 +442,8 @@ class AsyncFunctionsResourceWithStreamingResponse:
         self.create = async_to_streamed_response_wrapper(
             functions.create,
         )
-        self.list = async_to_streamed_response_wrapper(
-            functions.list,
+        self.retrieve_all = async_to_streamed_response_wrapper(
+            functions.retrieve_all,
         )
 
     @cached_property

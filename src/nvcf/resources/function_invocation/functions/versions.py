@@ -31,10 +31,21 @@ __all__ = ["VersionsResource", "AsyncVersionsResource"]
 class VersionsResource(SyncAPIResource):
     @cached_property
     def with_raw_response(self) -> VersionsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return VersionsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> VersionsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return VersionsResourceWithStreamingResponse(self)
 
     def invoke(
@@ -86,7 +97,9 @@ class VersionsResource(SyncAPIResource):
         extra_headers = {
             **strip_not_given(
                 {
-                    "NVCF-INPUT-ASSET-REFERENCES": nvcf_input_asset_references,
+                    "NVCF-INPUT-ASSET-REFERENCES": ",".join(nvcf_input_asset_references)
+                    if is_given(nvcf_input_asset_references)
+                    else NOT_GIVEN,
                     "NVCF-POLL-SECONDS": str(nvcf_poll_seconds) if is_given(nvcf_poll_seconds) else NOT_GIVEN,
                 }
             ),
@@ -105,10 +118,21 @@ class VersionsResource(SyncAPIResource):
 class AsyncVersionsResource(AsyncAPIResource):
     @cached_property
     def with_raw_response(self) -> AsyncVersionsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return AsyncVersionsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> AsyncVersionsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return AsyncVersionsResourceWithStreamingResponse(self)
 
     async def invoke(
@@ -160,7 +184,9 @@ class AsyncVersionsResource(AsyncAPIResource):
         extra_headers = {
             **strip_not_given(
                 {
-                    "NVCF-INPUT-ASSET-REFERENCES": nvcf_input_asset_references,
+                    "NVCF-INPUT-ASSET-REFERENCES": ",".join(nvcf_input_asset_references)
+                    if is_given(nvcf_input_asset_references)
+                    else NOT_GIVEN,
                     "NVCF-POLL-SECONDS": str(nvcf_poll_seconds) if is_given(nvcf_poll_seconds) else NOT_GIVEN,
                 }
             ),

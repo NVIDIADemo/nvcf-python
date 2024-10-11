@@ -5,19 +5,9 @@ from typing import List, Optional
 from pydantic import Field as FieldInfo
 
 from ...._models import BaseModel
+from ...shared.authorized_party_dto import AuthorizedPartyDTO
 
-__all__ = ["ListAuthorizedPartiesResponse", "Function", "FunctionAuthorizedParty"]
-
-
-class FunctionAuthorizedParty(BaseModel):
-    nca_id: str = FieldInfo(alias="ncaId")
-    """NVIDIA Cloud Account authorized to invoke the function"""
-
-    client_id: Optional[str] = FieldInfo(alias="clientId", default=None)
-    """Client Id -- 'sub' claim in the JWT.
-
-    This field should not be specified anymore.
-    """
+__all__ = ["ListAuthorizedPartiesResponse", "Function"]
 
 
 class Function(BaseModel):
@@ -27,7 +17,7 @@ class Function(BaseModel):
     nca_id: str = FieldInfo(alias="ncaId")
     """NVIDIA Cloud Account Id"""
 
-    authorized_parties: Optional[List[FunctionAuthorizedParty]] = FieldInfo(alias="authorizedParties", default=None)
+    authorized_parties: Optional[List[AuthorizedPartyDTO]] = FieldInfo(alias="authorizedParties", default=None)
     """Authorized parties allowed to invoke the function"""
 
     version_id: Optional[str] = FieldInfo(alias="versionId", default=None)

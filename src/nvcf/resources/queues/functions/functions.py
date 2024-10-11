@@ -22,7 +22,7 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.shared.get_queues_response import GetQueuesResponse
+from ....types.shared.queues_response import QueuesResponse
 
 __all__ = ["FunctionsResource", "AsyncFunctionsResource"]
 
@@ -34,13 +34,24 @@ class FunctionsResource(SyncAPIResource):
 
     @cached_property
     def with_raw_response(self) -> FunctionsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return FunctionsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> FunctionsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return FunctionsResourceWithStreamingResponse(self)
 
-    def list(
+    def retrieve_all(
         self,
         function_id: str,
         *,
@@ -50,7 +61,7 @@ class FunctionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> GetQueuesResponse:
+    ) -> QueuesResponse:
         """Provides details of all the queues associated with the specified function.
 
         If a
@@ -75,7 +86,7 @@ class FunctionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=GetQueuesResponse,
+            cast_to=QueuesResponse,
         )
 
 
@@ -86,13 +97,24 @@ class AsyncFunctionsResource(AsyncAPIResource):
 
     @cached_property
     def with_raw_response(self) -> AsyncFunctionsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return AsyncFunctionsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> AsyncFunctionsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return AsyncFunctionsResourceWithStreamingResponse(self)
 
-    async def list(
+    async def retrieve_all(
         self,
         function_id: str,
         *,
@@ -102,7 +124,7 @@ class AsyncFunctionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> GetQueuesResponse:
+    ) -> QueuesResponse:
         """Provides details of all the queues associated with the specified function.
 
         If a
@@ -127,7 +149,7 @@ class AsyncFunctionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=GetQueuesResponse,
+            cast_to=QueuesResponse,
         )
 
 
@@ -135,8 +157,8 @@ class FunctionsResourceWithRawResponse:
     def __init__(self, functions: FunctionsResource) -> None:
         self._functions = functions
 
-        self.list = to_raw_response_wrapper(
-            functions.list,
+        self.retrieve_all = to_raw_response_wrapper(
+            functions.retrieve_all,
         )
 
     @cached_property
@@ -148,8 +170,8 @@ class AsyncFunctionsResourceWithRawResponse:
     def __init__(self, functions: AsyncFunctionsResource) -> None:
         self._functions = functions
 
-        self.list = async_to_raw_response_wrapper(
-            functions.list,
+        self.retrieve_all = async_to_raw_response_wrapper(
+            functions.retrieve_all,
         )
 
     @cached_property
@@ -161,8 +183,8 @@ class FunctionsResourceWithStreamingResponse:
     def __init__(self, functions: FunctionsResource) -> None:
         self._functions = functions
 
-        self.list = to_streamed_response_wrapper(
-            functions.list,
+        self.retrieve_all = to_streamed_response_wrapper(
+            functions.retrieve_all,
         )
 
     @cached_property
@@ -174,8 +196,8 @@ class AsyncFunctionsResourceWithStreamingResponse:
     def __init__(self, functions: AsyncFunctionsResource) -> None:
         self._functions = functions
 
-        self.list = async_to_streamed_response_wrapper(
-            functions.list,
+        self.retrieve_all = async_to_streamed_response_wrapper(
+            functions.retrieve_all,
         )
 
     @cached_property

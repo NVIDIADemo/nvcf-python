@@ -21,8 +21,8 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.function_management.functions import id_list_params
-from ....types.function_management.functions.list_function_ids_response import ListFunctionIDsResponse
+from ....types.function_management.functions import id_retrieve_all_params
+from ....types.function_management.functions.id_retrieve_all_response import IDRetrieveAllResponse
 
 __all__ = ["IDsResource", "AsyncIDsResource"]
 
@@ -30,13 +30,24 @@ __all__ = ["IDsResource", "AsyncIDsResource"]
 class IDsResource(SyncAPIResource):
     @cached_property
     def with_raw_response(self) -> IDsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return IDsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> IDsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return IDsResourceWithStreamingResponse(self)
 
-    def list(
+    def retrieve_all(
         self,
         *,
         visibility: List[Literal["authorized", "private", "public"]] | NotGiven = NOT_GIVEN,
@@ -46,7 +57,7 @@ class IDsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ListFunctionIDsResponse:
+    ) -> IDRetrieveAllResponse:
         """
         Lists ids of all the functions in the authenticated NVIDIA Cloud Account.
         Requires either a bearer token or an api-key with 'list_functions' or
@@ -71,22 +82,33 @@ class IDsResource(SyncAPIResource):
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=maybe_transform({"visibility": visibility}, id_list_params.IDListParams),
+                query=maybe_transform({"visibility": visibility}, id_retrieve_all_params.IDRetrieveAllParams),
             ),
-            cast_to=ListFunctionIDsResponse,
+            cast_to=IDRetrieveAllResponse,
         )
 
 
 class AsyncIDsResource(AsyncAPIResource):
     @cached_property
     def with_raw_response(self) -> AsyncIDsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return AsyncIDsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> AsyncIDsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return AsyncIDsResourceWithStreamingResponse(self)
 
-    async def list(
+    async def retrieve_all(
         self,
         *,
         visibility: List[Literal["authorized", "private", "public"]] | NotGiven = NOT_GIVEN,
@@ -96,7 +118,7 @@ class AsyncIDsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> ListFunctionIDsResponse:
+    ) -> IDRetrieveAllResponse:
         """
         Lists ids of all the functions in the authenticated NVIDIA Cloud Account.
         Requires either a bearer token or an api-key with 'list_functions' or
@@ -121,9 +143,11 @@ class AsyncIDsResource(AsyncAPIResource):
                 extra_query=extra_query,
                 extra_body=extra_body,
                 timeout=timeout,
-                query=await async_maybe_transform({"visibility": visibility}, id_list_params.IDListParams),
+                query=await async_maybe_transform(
+                    {"visibility": visibility}, id_retrieve_all_params.IDRetrieveAllParams
+                ),
             ),
-            cast_to=ListFunctionIDsResponse,
+            cast_to=IDRetrieveAllResponse,
         )
 
 
@@ -131,8 +155,8 @@ class IDsResourceWithRawResponse:
     def __init__(self, ids: IDsResource) -> None:
         self._ids = ids
 
-        self.list = to_raw_response_wrapper(
-            ids.list,
+        self.retrieve_all = to_raw_response_wrapper(
+            ids.retrieve_all,
         )
 
 
@@ -140,8 +164,8 @@ class AsyncIDsResourceWithRawResponse:
     def __init__(self, ids: AsyncIDsResource) -> None:
         self._ids = ids
 
-        self.list = async_to_raw_response_wrapper(
-            ids.list,
+        self.retrieve_all = async_to_raw_response_wrapper(
+            ids.retrieve_all,
         )
 
 
@@ -149,8 +173,8 @@ class IDsResourceWithStreamingResponse:
     def __init__(self, ids: IDsResource) -> None:
         self._ids = ids
 
-        self.list = to_streamed_response_wrapper(
-            ids.list,
+        self.retrieve_all = to_streamed_response_wrapper(
+            ids.retrieve_all,
         )
 
 
@@ -158,6 +182,6 @@ class AsyncIDsResourceWithStreamingResponse:
     def __init__(self, ids: AsyncIDsResource) -> None:
         self._ids = ids
 
-        self.list = async_to_streamed_response_wrapper(
-            ids.list,
+        self.retrieve_all = async_to_streamed_response_wrapper(
+            ids.retrieve_all,
         )

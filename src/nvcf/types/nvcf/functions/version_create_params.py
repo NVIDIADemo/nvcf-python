@@ -6,8 +6,9 @@ from typing import List, Iterable
 from typing_extensions import Literal, Required, Annotated, TypedDict
 
 from ...._utils import PropertyInfo
+from ...shared_params.health_dto import HealthDTO
 
-__all__ = ["VersionCreateParams", "ContainerEnvironment", "Health", "Model", "Resource", "Secret"]
+__all__ = ["VersionCreateParams", "ContainerEnvironment", "Model", "Resource", "Secret"]
 
 
 class VersionCreateParams(TypedDict, total=False):
@@ -41,7 +42,7 @@ class VersionCreateParams(TypedDict, total=False):
     Defaults to DEFAULT.
     """
 
-    health: Health
+    health: HealthDTO
     """Data Transfer Object(DTO) representing a function ne"""
 
     health_uri: Annotated[str, PropertyInfo(alias="healthUri")]
@@ -78,23 +79,6 @@ class ContainerEnvironment(TypedDict, total=False):
 
     value: Required[str]
     """Container environment value"""
-
-
-class Health(TypedDict, total=False):
-    expected_status_code: Required[Annotated[int, PropertyInfo(alias="expectedStatusCode")]]
-    """Expected return status code considered as successful."""
-
-    port: Required[int]
-    """Port number where the health listener is running"""
-
-    protocol: Required[Literal["HTTP", "gRPC"]]
-    """HTTP/gPRC protocol type for health endpoint"""
-
-    timeout: Required[str]
-    """ISO 8601 duration string in PnDTnHnMn.nS format"""
-
-    uri: Required[str]
-    """Health endpoint for the container or the helmChart"""
 
 
 class Model(TypedDict, total=False):

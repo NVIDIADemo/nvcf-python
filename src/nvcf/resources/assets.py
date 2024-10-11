@@ -28,10 +28,21 @@ __all__ = ["AssetsResource", "AsyncAssetsResource"]
 class AssetsResource(SyncAPIResource):
     @cached_property
     def with_raw_response(self) -> AssetsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return AssetsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> AssetsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return AssetsResourceWithStreamingResponse(self)
 
     def create(
@@ -80,7 +91,7 @@ class AssetsResource(SyncAPIResource):
             cast_to=CreateAssetResponse,
         )
 
-    def list(
+    def retrieve_all(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -107,10 +118,21 @@ class AssetsResource(SyncAPIResource):
 class AsyncAssetsResource(AsyncAPIResource):
     @cached_property
     def with_raw_response(self) -> AsyncAssetsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return AsyncAssetsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> AsyncAssetsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return AsyncAssetsResourceWithStreamingResponse(self)
 
     async def create(
@@ -159,7 +181,7 @@ class AsyncAssetsResource(AsyncAPIResource):
             cast_to=CreateAssetResponse,
         )
 
-    async def list(
+    async def retrieve_all(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -190,8 +212,8 @@ class AssetsResourceWithRawResponse:
         self.create = to_raw_response_wrapper(
             assets.create,
         )
-        self.list = to_raw_response_wrapper(
-            assets.list,
+        self.retrieve_all = to_raw_response_wrapper(
+            assets.retrieve_all,
         )
 
 
@@ -202,8 +224,8 @@ class AsyncAssetsResourceWithRawResponse:
         self.create = async_to_raw_response_wrapper(
             assets.create,
         )
-        self.list = async_to_raw_response_wrapper(
-            assets.list,
+        self.retrieve_all = async_to_raw_response_wrapper(
+            assets.retrieve_all,
         )
 
 
@@ -214,8 +236,8 @@ class AssetsResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             assets.create,
         )
-        self.list = to_streamed_response_wrapper(
-            assets.list,
+        self.retrieve_all = to_streamed_response_wrapper(
+            assets.retrieve_all,
         )
 
 
@@ -226,6 +248,6 @@ class AsyncAssetsResourceWithStreamingResponse:
         self.create = async_to_streamed_response_wrapper(
             assets.create,
         )
-        self.list = async_to_streamed_response_wrapper(
-            assets.list,
+        self.retrieve_all = async_to_streamed_response_wrapper(
+            assets.retrieve_all,
         )

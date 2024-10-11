@@ -1,6 +1,6 @@
 [project]
 name = "nvcf"
-version = "0.0.1-alpha.0"
+version = "0.1.0-alpha.1"
 description = "The official Python library for the nvcf API"
 dynamic = ["readme"]
 license = "Apache-2.0"
@@ -15,7 +15,6 @@ dependencies = [
     "distro>=1.7.0, <2",
     "sniffio",
     "cached-property; python_version < '3.8'",
-
 ]
 requires-python = ">= 3.7"
 classifiers = [
@@ -36,11 +35,9 @@ classifiers = [
   "License :: OSI Approved :: Apache Software License"
 ]
 
-
-
 [project.urls]
-Homepage = "https://github.com/stainless-sdks/nvidia-cloud-functions-python"
-Repository = "https://github.com/stainless-sdks/nvidia-cloud-functions-python"
+Homepage = "https://github.com/NVIDIADemo/nvcf-python"
+Repository = "https://github.com/NVIDIADemo/nvcf-python"
 
 
 
@@ -59,7 +56,6 @@ dev-dependencies = [
     "dirty-equals>=0.6.0",
     "importlib-metadata>=6.7.0",
     "rich>=13.7.1",
-
 ]
 
 [tool.rye.scripts]
@@ -127,7 +123,7 @@ path = "README.md"
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
 # replace relative links with absolute links
 pattern = '\[(.+?)\]\(((?!https?://)\S+?)\)'
-replacement = '[\1](https://github.com/stainless-sdks/nvidia-cloud-functions-python/tree/main/\g<2>)'
+replacement = '[\1](https://github.com/NVIDIADemo/nvcf-python/tree/main/\g<2>)'
 
 [tool.black]
 line-length = 120
