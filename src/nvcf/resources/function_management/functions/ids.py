@@ -30,10 +30,21 @@ __all__ = ["IDsResource", "AsyncIDsResource"]
 class IDsResource(SyncAPIResource):
     @cached_property
     def with_raw_response(self) -> IDsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return IDsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> IDsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return IDsResourceWithStreamingResponse(self)
 
     def retrieve_all(
@@ -80,10 +91,21 @@ class IDsResource(SyncAPIResource):
 class AsyncIDsResource(AsyncAPIResource):
     @cached_property
     def with_raw_response(self) -> AsyncIDsResourceWithRawResponse:
+        """
+        This property can be used as a prefix for any HTTP method call to return the
+        the raw response object instead of the parsed content.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#accessing-raw-response-data-eg-headers
+        """
         return AsyncIDsResourceWithRawResponse(self)
 
     @cached_property
     def with_streaming_response(self) -> AsyncIDsResourceWithStreamingResponse:
+        """
+        An alternative to `.with_raw_response` that doesn't eagerly read the response body.
+
+        For more information, see https://www.github.com/NVIDIADemo/nvcf-python#with_streaming_response
+        """
         return AsyncIDsResourceWithStreamingResponse(self)
 
     async def retrieve_all(
