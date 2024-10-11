@@ -5,9 +5,9 @@
 from ..._models import BaseModel
 from .function_dto import FunctionDTO
 
-__all__ = ["CreateFunctionResponse"]
+__all__ = ["Function"]
 
 
-class CreateFunctionResponse(BaseModel):
+class Function(BaseModel):
     function: FunctionDTO
     """Data Transfer Object (DTO) representing a function"""

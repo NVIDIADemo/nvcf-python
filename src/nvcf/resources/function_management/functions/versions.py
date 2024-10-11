@@ -20,7 +20,7 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.shared.function_response import FunctionResponse
+from ....types.shared.function import Function
 from ....types.function_management.functions import version_update_params
 
 __all__ = ["VersionsResource", "AsyncVersionsResource"]
@@ -46,7 +46,7 @@ class VersionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionResponse:
+    ) -> Function:
         """
         Retrieves detailed information of the specified function version in the
         authenticated NVIDIA Cloud Account. Requires either a bearer token or an api-key
@@ -73,7 +73,7 @@ class VersionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FunctionResponse,
+            cast_to=Function,
         )
 
     def update(
@@ -88,7 +88,7 @@ class VersionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionResponse:
+    ) -> Function:
         """
         Updates metadata, such as tags, of the specified function version within the
         authenticated NVIDIA Cloud Account. Values specified in the payload completely
@@ -118,7 +118,7 @@ class VersionsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FunctionResponse,
+            cast_to=Function,
         )
 
     def delete(
@@ -185,7 +185,7 @@ class AsyncVersionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionResponse:
+    ) -> Function:
         """
         Retrieves detailed information of the specified function version in the
         authenticated NVIDIA Cloud Account. Requires either a bearer token or an api-key
@@ -212,7 +212,7 @@ class AsyncVersionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FunctionResponse,
+            cast_to=Function,
         )
 
     async def update(
@@ -227,7 +227,7 @@ class AsyncVersionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FunctionResponse:
+    ) -> Function:
         """
         Updates metadata, such as tags, of the specified function version within the
         authenticated NVIDIA Cloud Account. Values specified in the payload completely
@@ -257,7 +257,7 @@ class AsyncVersionsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FunctionResponse,
+            cast_to=Function,
         )
 
     async def delete(

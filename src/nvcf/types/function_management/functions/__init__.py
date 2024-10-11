@@ -2,6 +2,6 @@
 
 from __future__ import annotations
 
-from .id_list_params import IDListParams as IDListParams
 from .version_update_params import VersionUpdateParams as VersionUpdateParams
-from .list_function_ids_response import ListFunctionIDsResponse as ListFunctionIDsResponse
+from .id_retrieve_all_params import IDRetrieveAllParams as IDRetrieveAllParams
+from .id_retrieve_all_response import IDRetrieveAllResponse as IDRetrieveAllResponse

@@ -28,7 +28,7 @@ class ClusterGroupsResource(SyncAPIResource):
     def with_streaming_response(self) -> ClusterGroupsResourceWithStreamingResponse:
         return ClusterGroupsResourceWithStreamingResponse(self)
 
-    def list(
+    def retrieve_all(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -63,7 +63,7 @@ class AsyncClusterGroupsResource(AsyncAPIResource):
     def with_streaming_response(self) -> AsyncClusterGroupsResourceWithStreamingResponse:
         return AsyncClusterGroupsResourceWithStreamingResponse(self)
 
-    async def list(
+    async def retrieve_all(
         self,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -93,8 +93,8 @@ class ClusterGroupsResourceWithRawResponse:
     def __init__(self, cluster_groups: ClusterGroupsResource) -> None:
         self._cluster_groups = cluster_groups
 
-        self.list = to_raw_response_wrapper(
-            cluster_groups.list,
+        self.retrieve_all = to_raw_response_wrapper(
+            cluster_groups.retrieve_all,
         )
 
 
@@ -102,8 +102,8 @@ class AsyncClusterGroupsResourceWithRawResponse:
     def __init__(self, cluster_groups: AsyncClusterGroupsResource) -> None:
         self._cluster_groups = cluster_groups
 
-        self.list = async_to_raw_response_wrapper(
-            cluster_groups.list,
+        self.retrieve_all = async_to_raw_response_wrapper(
+            cluster_groups.retrieve_all,
         )
 
 
@@ -111,8 +111,8 @@ class ClusterGroupsResourceWithStreamingResponse:
     def __init__(self, cluster_groups: ClusterGroupsResource) -> None:
         self._cluster_groups = cluster_groups
 
-        self.list = to_streamed_response_wrapper(
-            cluster_groups.list,
+        self.retrieve_all = to_streamed_response_wrapper(
+            cluster_groups.retrieve_all,
         )
 
 
@@ -120,6 +120,6 @@ class AsyncClusterGroupsResourceWithStreamingResponse:
     def __init__(self, cluster_groups: AsyncClusterGroupsResource) -> None:
         self._cluster_groups = cluster_groups
 
-        self.list = async_to_streamed_response_wrapper(
-            cluster_groups.list,
+        self.retrieve_all = async_to_streamed_response_wrapper(
+            cluster_groups.retrieve_all,
         )

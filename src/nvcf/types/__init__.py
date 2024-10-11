@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 from .shared import (
-    FunctionResponse as FunctionResponse,
-    GetQueuesResponse as GetQueuesResponse,
-    ListFunctionsResponse as ListFunctionsResponse,
+    Queues as Queues,
+    Function as Function,
+    HealthDTO as HealthDTO,
+    FunctionDTO as FunctionDTO,
+    AuthorizedParties as AuthorizedParties,
+    FunctionsResponse as FunctionsResponse,
+    AuthorizedPartyDTO as AuthorizedPartyDTO,
     CreateFunctionResponse as CreateFunctionResponse,
     InvokeFunctionResponse as InvokeFunctionResponse,
-    AuthorizedPartiesResponse as AuthorizedPartiesResponse,
 )
 from .asset_create_params import AssetCreateParams as AssetCreateParams
 from .list_assets_response import ListAssetsResponse as ListAssetsResponse

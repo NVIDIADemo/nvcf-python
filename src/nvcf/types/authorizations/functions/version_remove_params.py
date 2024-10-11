@@ -5,23 +5,13 @@ from __future__ import annotations
 from typing_extensions import Required, Annotated, TypedDict
 
 from ...._utils import PropertyInfo
+from ...shared_params.authorized_party_dto import AuthorizedPartyDTO
 
-__all__ = ["VersionRemoveParams", "AuthorizedParty"]
+__all__ = ["VersionRemoveParams"]
 
 
 class VersionRemoveParams(TypedDict, total=False):
     function_id: Required[Annotated[str, PropertyInfo(alias="functionId")]]
 
-    authorized_party: Required[Annotated[AuthorizedParty, PropertyInfo(alias="authorizedParty")]]
+    authorized_party: Required[Annotated[AuthorizedPartyDTO, PropertyInfo(alias="authorizedParty")]]
     """Data Transfer Object(DTO) representing an authorized party."""
-
-
-class AuthorizedParty(TypedDict, total=False):
-    nca_id: Required[Annotated[str, PropertyInfo(alias="ncaId")]]
-    """NVIDIA Cloud Account authorized to invoke the function"""
-
-    client_id: Annotated[str, PropertyInfo(alias="clientId")]
-    """Client Id -- 'sub' claim in the JWT.
-
-    This field should not be specified anymore.
-    """

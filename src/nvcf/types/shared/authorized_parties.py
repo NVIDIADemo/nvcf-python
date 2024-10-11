@@ -4,10 +4,10 @@ from typing import List, Optional
 
 from pydantic import Field as FieldInfo
 
-from ...._models import BaseModel
-from ...shared.authorized_party_dto import AuthorizedPartyDTO
+from ..._models import BaseModel
+from .authorized_party_dto import AuthorizedPartyDTO
 
-__all__ = ["ListAuthorizedPartiesResponse", "Function"]
+__all__ = ["AuthorizedParties", "Function"]
 
 
 class Function(BaseModel):
@@ -24,6 +24,6 @@ class Function(BaseModel):
     """Function version id"""
 
 
-class ListAuthorizedPartiesResponse(BaseModel):
-    functions: List[Function]
-    """Functions with authorized parties and other details"""
+class AuthorizedParties(BaseModel):
+    function: Function
+    """Data Transfer Object(DTO) representing a function with authorized accounts"""
