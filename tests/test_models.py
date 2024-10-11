@@ -7,9 +7,9 @@ import pytest
 import pydantic
 from pydantic import Field
 
-from nvidia_cloud_functions._utils import PropertyInfo
-from nvidia_cloud_functions._compat import PYDANTIC_V2, parse_obj, model_dump, model_json
-from nvidia_cloud_functions._models import BaseModel, construct_type
+from nvcf._utils import PropertyInfo
+from nvcf._compat import PYDANTIC_V2, parse_obj, model_dump, model_json
+from nvcf._models import BaseModel, construct_type
 
 
 class BasicModel(BaseModel):

@@ -7,9 +7,9 @@ from typing import Any, cast
 
 import pytest
 
+from nvcf import NVCF, AsyncNVCF
+from nvcf.types import ListAssetsResponse, CreateAssetResponse
 from tests.utils import assert_matches_type
-from nvidia_cloud_functions import NvidiaCloudFunctions, AsyncNvidiaCloudFunctions
-from nvidia_cloud_functions.types import ListAssetsResponse, CreateAssetResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -18,7 +18,7 @@ class TestAssets:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
     @parametrize
-    def test_method_create(self, client: NvidiaCloudFunctions) -> None:
+    def test_method_create(self, client: NVCF) -> None:
         asset = client.assets.create(
             content_type="contentType",
             description="description",
@@ -26,7 +26,7 @@ class TestAssets:
         assert_matches_type(CreateAssetResponse, asset, path=["response"])
 
     @parametrize
-    def test_raw_response_create(self, client: NvidiaCloudFunctions) -> None:
+    def test_raw_response_create(self, client: NVCF) -> None:
         response = client.assets.with_raw_response.create(
             content_type="contentType",
             description="description",
@@ -38,7 +38,7 @@ class TestAssets:
         assert_matches_type(CreateAssetResponse, asset, path=["response"])
 
     @parametrize
-    def test_streaming_response_create(self, client: NvidiaCloudFunctions) -> None:
+    def test_streaming_response_create(self, client: NVCF) -> None:
         with client.assets.with_streaming_response.create(
             content_type="contentType",
             description="description",
@@ -52,12 +52,12 @@ class TestAssets:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
-    def test_method_list(self, client: NvidiaCloudFunctions) -> None:
+    def test_method_list(self, client: NVCF) -> None:
         asset = client.assets.list()
         assert_matches_type(ListAssetsResponse, asset, path=["response"])
 
     @parametrize
-    def test_raw_response_list(self, client: NvidiaCloudFunctions) -> None:
+    def test_raw_response_list(self, client: NVCF) -> None:
         response = client.assets.with_raw_response.list()
 
         assert response.is_closed is True
@@ -66,7 +66,7 @@ class TestAssets:
         assert_matches_type(ListAssetsResponse, asset, path=["response"])
 
     @parametrize
-    def test_streaming_response_list(self, client: NvidiaCloudFunctions) -> None:
+    def test_streaming_response_list(self, client: NVCF) -> None:
         with client.assets.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -81,7 +81,7 @@ class TestAsyncAssets:
     parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
 
     @parametrize
-    async def test_method_create(self, async_client: AsyncNvidiaCloudFunctions) -> None:
+    async def test_method_create(self, async_client: AsyncNVCF) -> None:
         asset = await async_client.assets.create(
             content_type="contentType",
             description="description",
@@ -89,7 +89,7 @@ class TestAsyncAssets:
         assert_matches_type(CreateAssetResponse, asset, path=["response"])
 
     @parametrize
-    async def test_raw_response_create(self, async_client: AsyncNvidiaCloudFunctions) -> None:
+    async def test_raw_response_create(self, async_client: AsyncNVCF) -> None:
         response = await async_client.assets.with_raw_response.create(
             content_type="contentType",
             description="description",
@@ -101,7 +101,7 @@ class TestAsyncAssets:
         assert_matches_type(CreateAssetResponse, asset, path=["response"])
 
     @parametrize
-    async def test_streaming_response_create(self, async_client: AsyncNvidiaCloudFunctions) -> None:
+    async def test_streaming_response_create(self, async_client: AsyncNVCF) -> None:
         async with async_client.assets.with_streaming_response.create(
             content_type="contentType",
             description="description",
@@ -115,12 +115,12 @@ class TestAsyncAssets:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
-    async def test_method_list(self, async_client: AsyncNvidiaCloudFunctions) -> None:
+    async def test_method_list(self, async_client: AsyncNVCF) -> None:
         asset = await async_client.assets.list()
         assert_matches_type(ListAssetsResponse, asset, path=["response"])
 
     @parametrize
-    async def test_raw_response_list(self, async_client: AsyncNvidiaCloudFunctions) -> None:
+    async def test_raw_response_list(self, async_client: AsyncNVCF) -> None:
         response = await async_client.assets.with_raw_response.list()
 
         assert response.is_closed is True
@@ -129,7 +129,7 @@ class TestAsyncAssets:
         assert_matches_type(ListAssetsResponse, asset, path=["response"])
 
     @parametrize
-    async def test_streaming_response_list(self, async_client: AsyncNvidiaCloudFunctions) -> None:
+    async def test_streaming_response_list(self, async_client: AsyncNVCF) -> None:
         async with async_client.assets.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

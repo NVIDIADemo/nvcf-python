@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from nvidia_cloud_functions._utils import required_args
+from nvcf._utils import required_args
 
 
 def test_too_many_positional_params() -> None:

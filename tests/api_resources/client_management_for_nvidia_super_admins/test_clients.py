@@ -7,9 +7,9 @@ from typing import Any, cast
 
 import pytest
 
+from nvcf import NVCF, AsyncNVCF
 from tests.utils import assert_matches_type
-from nvidia_cloud_functions import NvidiaCloudFunctions, AsyncNvidiaCloudFunctions
-from nvidia_cloud_functions.types.client_management_for_nvidia_super_admins import ClientRetrieveResponse
+from nvcf.types.client_management_for_nvidia_super_admins import ClientRetrieveResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -18,14 +18,14 @@ class TestClients:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
     @parametrize
-    def test_method_retrieve(self, client: NvidiaCloudFunctions) -> None:
+    def test_method_retrieve(self, client: NVCF) -> None:
         client_ = client.client_management_for_nvidia_super_admins.clients.retrieve(
             "clientId",
         )
         assert_matches_type(ClientRetrieveResponse, client_, path=["response"])
 
     @parametrize
-    def test_raw_response_retrieve(self, client: NvidiaCloudFunctions) -> None:
+    def test_raw_response_retrieve(self, client: NVCF) -> None:
         response = client.client_management_for_nvidia_super_admins.clients.with_raw_response.retrieve(
             "clientId",
         )
@@ -36,7 +36,7 @@ class TestClients:
         assert_matches_type(ClientRetrieveResponse, client_, path=["response"])
 
     @parametrize
-    def test_streaming_response_retrieve(self, client: NvidiaCloudFunctions) -> None:
+    def test_streaming_response_retrieve(self, client: NVCF) -> None:
         with client.client_management_for_nvidia_super_admins.clients.with_streaming_response.retrieve(
             "clientId",
         ) as response:
@@ -49,7 +49,7 @@ class TestClients:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
-    def test_path_params_retrieve(self, client: NvidiaCloudFunctions) -> None:
+    def test_path_params_retrieve(self, client: NVCF) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `client_id` but received ''"):
             client.client_management_for_nvidia_super_admins.clients.with_raw_response.retrieve(
                 "",
@@ -60,14 +60,14 @@ class TestAsyncClients:
     parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
 
     @parametrize
-    async def test_method_retrieve(self, async_client: AsyncNvidiaCloudFunctions) -> None:
+    async def test_method_retrieve(self, async_client: AsyncNVCF) -> None:
         client = await async_client.client_management_for_nvidia_super_admins.clients.retrieve(
             "clientId",
         )
         assert_matches_type(ClientRetrieveResponse, client, path=["response"])
 
     @parametrize
-    async def test_raw_response_retrieve(self, async_client: AsyncNvidiaCloudFunctions) -> None:
+    async def test_raw_response_retrieve(self, async_client: AsyncNVCF) -> None:
         response = await async_client.client_management_for_nvidia_super_admins.clients.with_raw_response.retrieve(
             "clientId",
         )
@@ -78,7 +78,7 @@ class TestAsyncClients:
         assert_matches_type(ClientRetrieveResponse, client, path=["response"])
 
     @parametrize
-    async def test_streaming_response_retrieve(self, async_client: AsyncNvidiaCloudFunctions) -> None:
+    async def test_streaming_response_retrieve(self, async_client: AsyncNVCF) -> None:
         async with async_client.client_management_for_nvidia_super_admins.clients.with_streaming_response.retrieve(
             "clientId",
         ) as response:
@@ -91,7 +91,7 @@ class TestAsyncClients:
         assert cast(Any, response.is_closed) is True
 
     @parametrize
-    async def test_path_params_retrieve(self, async_client: AsyncNvidiaCloudFunctions) -> None:
+    async def test_path_params_retrieve(self, async_client: AsyncNVCF) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `client_id` but received ''"):
             await async_client.client_management_for_nvidia_super_admins.clients.with_raw_response.retrieve(
                 "",
