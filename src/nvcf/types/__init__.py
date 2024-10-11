@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 from .shared import (
-    Queues as Queues,
     Function as Function,
     HealthDTO as HealthDTO,
     FunctionDTO as FunctionDTO,
+    QueuesResponse as QueuesResponse,
     AuthorizedParties as AuthorizedParties,
     FunctionsResponse as FunctionsResponse,
     AuthorizedPartyDTO as AuthorizedPartyDTO,

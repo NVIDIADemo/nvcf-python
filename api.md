@@ -10,7 +10,7 @@ from nvcf.types import (
     FunctionsResponse,
     HealthDTO,
     InvokeFunctionResponse,
-    Queues,
+    QueuesResponse,
 )
 ```
 
@@ -190,13 +190,13 @@ Methods:
 
 Methods:
 
-- <code title="get /v2/nvcf/queues/functions/{functionId}">client.queues.functions.<a href="./src/nvcf/resources/queues/functions/functions.py">retrieve_all</a>(function_id) -> <a href="./src/nvcf/types/shared/queues.py">Queues</a></code>
+- <code title="get /v2/nvcf/queues/functions/{functionId}">client.queues.functions.<a href="./src/nvcf/resources/queues/functions/functions.py">retrieve_all</a>(function_id) -> <a href="./src/nvcf/types/shared/queues_response.py">QueuesResponse</a></code>
 
 ### Versions
 
 Methods:
 
-- <code title="get /v2/nvcf/queues/functions/{functionId}/versions/{versionId}">client.queues.functions.versions.<a href="./src/nvcf/resources/queues/functions/versions.py">retrieve_all</a>(version_id, \*, function_id) -> <a href="./src/nvcf/types/shared/queues.py">Queues</a></code>
+- <code title="get /v2/nvcf/queues/functions/{functionId}/versions/{versionId}">client.queues.functions.versions.<a href="./src/nvcf/resources/queues/functions/versions.py">retrieve_all</a>(version_id, \*, function_id) -> <a href="./src/nvcf/types/shared/queues_response.py">QueuesResponse</a></code>
 
 ## Position
 
