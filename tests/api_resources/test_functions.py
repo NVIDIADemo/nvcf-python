@@ -9,7 +9,7 @@ import pytest
 
 from nvcf import NVCF, AsyncNVCF
 from tests.utils import assert_matches_type
-from nvcf.types.shared import FunctionsResponse, CreateFunctionResponse
+from nvcf.types.shared import FunctionDTO, FunctionsResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -23,7 +23,7 @@ class TestFunctions:
             inference_url="https://example.com",
             name="x",
         )
-        assert_matches_type(CreateFunctionResponse, function, path=["response"])
+        assert_matches_type(FunctionDTO, function, path=["response"])
 
     @parametrize
     def test_method_create_with_all_params(self, client: NVCF) -> None:
@@ -82,7 +82,7 @@ class TestFunctions:
             ],
             tags=["string"],
         )
-        assert_matches_type(CreateFunctionResponse, function, path=["response"])
+        assert_matches_type(FunctionDTO, function, path=["response"])
 
     @parametrize
     def test_raw_response_create(self, client: NVCF) -> None:
@@ -94,7 +94,7 @@ class TestFunctions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         function = response.parse()
-        assert_matches_type(CreateFunctionResponse, function, path=["response"])
+        assert_matches_type(FunctionDTO, function, path=["response"])
 
     @parametrize
     def test_streaming_response_create(self, client: NVCF) -> None:
@@ -106,7 +106,7 @@ class TestFunctions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             function = response.parse()
-            assert_matches_type(CreateFunctionResponse, function, path=["response"])
+            assert_matches_type(FunctionDTO, function, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -152,7 +152,7 @@ class TestAsyncFunctions:
             inference_url="https://example.com",
             name="x",
         )
-        assert_matches_type(CreateFunctionResponse, function, path=["response"])
+        assert_matches_type(FunctionDTO, function, path=["response"])
 
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncNVCF) -> None:
@@ -211,7 +211,7 @@ class TestAsyncFunctions:
             ],
             tags=["string"],
         )
-        assert_matches_type(CreateFunctionResponse, function, path=["response"])
+        assert_matches_type(FunctionDTO, function, path=["response"])
 
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncNVCF) -> None:
@@ -223,7 +223,7 @@ class TestAsyncFunctions:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         function = await response.parse()
-        assert_matches_type(CreateFunctionResponse, function, path=["response"])
+        assert_matches_type(FunctionDTO, function, path=["response"])
 
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncNVCF) -> None:
@@ -235,7 +235,7 @@ class TestAsyncFunctions:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             function = await response.parse()
-            assert_matches_type(CreateFunctionResponse, function, path=["response"])
+            assert_matches_type(FunctionDTO, function, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

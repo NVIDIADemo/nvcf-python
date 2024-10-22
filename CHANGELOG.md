@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0-alpha.3 (2024-10-22)
+
+Full Changelog: [v0.1.0-alpha.2...v0.1.0-alpha.3](https://github.com/NVIDIADemo/nvcf-python/compare/v0.1.0-alpha.2...v0.1.0-alpha.3)
+
+### Features
+
+* **api:** api update ([#12](https://github.com/NVIDIADemo/nvcf-python/issues/12)) ([e255d38](https://github.com/NVIDIADemo/nvcf-python/commit/e255d380c6e324d447f1335a0ba840d35a6031dd))
+* **api:** api update ([#14](https://github.com/NVIDIADemo/nvcf-python/issues/14)) ([80f1173](https://github.com/NVIDIADemo/nvcf-python/commit/80f1173e1c97eb01787b3dfe93ce4b19ecfb6aa5))
+
 ## 0.1.0-alpha.2 (2024-10-11)
 
 Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/NVIDIADemo/nvcf-python/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)
