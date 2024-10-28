@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List, Iterable
+from typing import List, Type, Iterable, cast
 from typing_extensions import Literal
 
 import httpx
@@ -29,10 +29,11 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
+from ..._wrappers import FunctionWrapper
 from ..._base_client import make_request_options
+from ...types.shared.function_dto import FunctionDTO
 from ...types.shared_params.health_dto import HealthDTO
 from ...types.shared.functions_response import FunctionsResponse
-from ...types.shared.create_function_response import CreateFunctionResponse
 
 __all__ = ["FunctionsResource", "AsyncFunctionsResource"]
 
@@ -87,7 +88,7 @@ class FunctionsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> CreateFunctionResponse:
+    ) -> FunctionDTO:
         """Creates a new function within the authenticated NVIDIA Cloud Account.
 
         Requires a
@@ -164,9 +165,13 @@ class FunctionsResource(SyncAPIResource):
                 function_create_params.FunctionCreateParams,
             ),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                post_parser=FunctionWrapper[FunctionDTO]._unwrapper,
             ),
-            cast_to=CreateFunctionResponse,
+            cast_to=cast(Type[FunctionDTO], FunctionWrapper[FunctionDTO]),
         )
 
     def retrieve_all(
@@ -262,7 +267,7 @@ class AsyncFunctionsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> CreateFunctionResponse:
+    ) -> FunctionDTO:
         """Creates a new function within the authenticated NVIDIA Cloud Account.
 
         Requires a
@@ -339,9 +344,13 @@ class AsyncFunctionsResource(AsyncAPIResource):
                 function_create_params.FunctionCreateParams,
             ),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                post_parser=FunctionWrapper[FunctionDTO]._unwrapper,
             ),
-            cast_to=CreateFunctionResponse,
+            cast_to=cast(Type[FunctionDTO], FunctionWrapper[FunctionDTO]),
         )
 
     async def retrieve_all(

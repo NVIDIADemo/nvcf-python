@@ -35,11 +35,11 @@ client = NVCF(
     auth_token=os.environ.get("NVCF_AUTH_TOKEN"),
 )
 
-create_function_response = client.functions.create(
+function_dto = client.functions.create(
     inference_url="https://example.com",
     name="x",
 )
-print(create_function_response.function)
+print(function_dto.id)
 ```
 
 While you can provide a `auth_token` keyword argument,
@@ -63,11 +63,11 @@ client = AsyncNVCF(
 
 
 async def main() -> None:
-    create_function_response = await client.functions.create(
+    function_dto = await client.functions.create(
         inference_url="https://example.com",
         name="x",
     )
-    print(create_function_response.function)
+    print(function_dto.id)
 
 
 asyncio.run(main())
@@ -221,7 +221,7 @@ response = client.functions.with_raw_response.create(
 print(response.headers.get('X-My-Header'))
 
 function = response.parse()  # get the object that `functions.create()` would have returned
-print(function.function)
+print(function.id)
 ```
 
 These methods return an [`APIResponse`](https://github.com/NVIDIADemo/nvcf-python/tree/main/src/nvcf/_response.py) object.
